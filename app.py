@@ -33,7 +33,7 @@ brands = [
     "Nissan", "Opel", "Renault", "Skoda", "Tata", "Toyota", "Volkswagen", "Volvo",
 ]
 
-st.title("Car Price Predictor")
+st.title("🚙 Car Price Predictor")
 st.caption("Estimate a used car's selling price with the trained Random Forest model.")
 
 with st.form("prediction_form"):

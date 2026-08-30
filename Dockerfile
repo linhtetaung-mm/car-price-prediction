@@ -12,8 +12,10 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY app.py .
 COPY models/ models/
 
+ENV PORT=8501
+
 EXPOSE 8501
 
-HEALTHCHECK CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')"
+HEALTHCHECK CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:${PORT}/_stcore/health')"
 
-CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501", "--server.headless=true"]
+CMD ["sh", "-c", "streamlit run app.py --server.address=0.0.0.0 --server.port=${PORT} --server.headless=true"]

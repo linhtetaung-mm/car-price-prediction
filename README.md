@@ -24,6 +24,15 @@ docker run --rm -p 8501:8501 car-price-predictor
 
 Then open <http://localhost:8501>.
 
+## Deploy the Docker version on Render
+
+1. Push the repository to GitHub.
+2. In the Render dashboard, select **New > Web Service** and connect the GitHub repository.
+3. Select the `main` branch and choose the **Docker** runtime. Render will use the root `Dockerfile`.
+4. Select the desired instance plan, set the health check path to `/_stcore/health`, and create the service.
+
+Render provides a public `onrender.com` URL. With auto-deploy enabled, each later push to `main` rebuilds the image and updates the service without changing its URL.
+
 ## Project files
 
 - `app.py`: Streamlit prediction interface
