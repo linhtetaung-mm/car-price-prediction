@@ -35,37 +35,70 @@ brands = [
 
 st.title("🚙 Car Price Predictor")
 st.caption("Estimate a used car's selling price with the trained Random Forest model.")
+st.info(
+    "Enter the information you know, then click **Predict price**. "
+    "Choose **Not sure** for any unknown field; the model will automatically fill missing "
+    "numeric values with the training median and missing categories with the most frequent value."
+)
+
+UNKNOWN = "Not sure"
+
+
+def optional_selectbox(label, options, default=None):
+    """Create a select box with an explicit missing-value option."""
+    choices = [UNKNOWN, *options]
+    selected_index = choices.index(default) if default in choices else 0
+    return st.selectbox(label, choices, index=selected_index)
+
+
+def missing_if_unknown(value):
+    """Convert the form's unknown marker into a value understood by the pipeline."""
+    return np.nan if value == UNKNOWN or value is None else value
 
 with st.form("prediction_form"):
     left, right = st.columns(2)
 
     with left:
-        brand = st.selectbox("Brand", brands, index=brands.index("Maruti"))
-        year = st.number_input("Year", min_value=1983, max_value=2026, value=2018, step=1)
+        brand = optional_selectbox("Brand", brands, default="Maruti")
+        year = st.number_input(
+            "Year", min_value=1983, max_value=2026, value=None, step=1,
+            placeholder="Not sure",
+        )
         km_driven = st.number_input(
-            "Kilometres driven", min_value=0, max_value=2_500_000, value=45_000, step=1_000
+            "Kilometres driven", min_value=0, max_value=2_500_000, value=None,
+            step=1_000, placeholder="Not sure",
         )
-        fuel = st.selectbox("Fuel", ["Diesel", "Petrol"], index=1)
-        seller_type = st.selectbox(
-            "Seller type", ["Dealer", "Individual", "Trustmark Dealer"], index=1
+        fuel = optional_selectbox("Fuel", ["Diesel", "Petrol"], default="Petrol")
+        seller_type = optional_selectbox(
+            "Seller type", ["Dealer", "Individual", "Trustmark Dealer"],
+            default="Individual",
         )
-        transmission = st.selectbox("Transmission", ["Automatic", "Manual"], index=1)
+        transmission = optional_selectbox(
+            "Transmission", ["Automatic", "Manual"], default="Manual"
+        )
 
     with right:
-        owner_label = st.selectbox(
+        owner_label = optional_selectbox(
             "Ownership history",
             ["First Owner", "Second Owner", "Third Owner", "Fourth & Above Owner"],
+            default="First Owner",
         )
         mileage = st.number_input(
-            "Mileage (km/l)", min_value=5.0, max_value=45.0, value=20.0, step=0.1
+            "Mileage (km/l)", min_value=5.0, max_value=45.0, value=None,
+            step=0.1, placeholder="Not sure",
         )
         engine = st.number_input(
-            "Engine (CC)", min_value=500, max_value=4_000, value=1_197, step=10
+            "Engine (CC)", min_value=500, max_value=4_000, value=None,
+            step=10, placeholder="Not sure",
         )
         max_power = st.number_input(
-            "Maximum power (bhp)", min_value=20.0, max_value=450.0, value=82.0, step=1.0
+            "Maximum power (bhp)", min_value=20.0, max_value=450.0, value=None,
+            step=1.0, placeholder="Not sure",
         )
-        seats = st.number_input("Seats", min_value=2, max_value=14, value=5, step=1)
+        seats = st.number_input(
+            "Seats", min_value=2, max_value=14, value=None, step=1,
+            placeholder="Not sure",
+        )
 
     submitted = st.form_submit_button("Predict price", type="primary", use_container_width=True)
 
@@ -75,25 +108,32 @@ if submitted:
         "Second Owner": 2,
         "Third Owner": 3,
         "Fourth & Above Owner": 4,
+        UNKNOWN: np.nan,
     }
     car = pd.DataFrame([{
-        "brand": brand,
-        "year": int(year),
-        "km_driven": int(km_driven),
-        "fuel": fuel,
-        "seller_type": seller_type,
-        "transmission": transmission,
+        "brand": missing_if_unknown(brand),
+        "year": missing_if_unknown(year),
+        "km_driven": missing_if_unknown(km_driven),
+        "fuel": missing_if_unknown(fuel),
+        "seller_type": missing_if_unknown(seller_type),
+        "transmission": missing_if_unknown(transmission),
         "owner": owner_mapping[owner_label],
-        "mileage": float(mileage),
-        "engine": float(engine),
-        "max_power": float(max_power),
-        "seats": float(seats),
+        "mileage": missing_if_unknown(mileage),
+        "engine": missing_if_unknown(engine),
+        "max_power": missing_if_unknown(max_power),
+        "seats": missing_if_unknown(seats),
     }])
 
     try:
         predicted_log_price = model.predict(car)[0]
         predicted_price = float(np.exp(predicted_log_price))
         st.success(f"Estimated selling price: ₹{predicted_price:,.0f}")
+        missing_count = int(car.isna().sum(axis=1).iloc[0])
+        if missing_count:
+            st.caption(
+                f"The model automatically imputed {missing_count} missing "
+                f"field{'s' if missing_count != 1 else ''}."
+            )
         st.caption(
             "This is a model estimate in Indian rupees, not a guaranteed market valuation. "
             "Predictions are most reliable for cars similar to the training data."
