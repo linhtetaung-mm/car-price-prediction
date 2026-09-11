@@ -8,3 +8,7 @@ __pycache__/
 data/
 docs/
 notebooks/
+assignment2/mlruns/
+assignment2/mlartifacts/
+assignment2/mlflow*.db
+assignment2/__pycache__/

@@ -1,0 +1,18 @@
+{
+  "best_config": {
+    "model_type": "normal",
+    "polynomial": false,
+    "regularization": "normal",
+    "use_momentum": false,
+    "method": "stochastic",
+    "initialization": "xavier",
+    "learning_rate": 0.01,
+    "cv_mse": 0.07232114248159309,
+    "cv_r2": 0.8763742620709472,
+    "cv_r2_std": 0.010438641904058712
+  },
+  "test_metrics": {
+    "test_mse_log": 0.07703787216536398,
+    "test_r2_log": 0.8613756980976315
+  }
+}

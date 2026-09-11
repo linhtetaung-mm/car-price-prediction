@@ -1,0 +1,2148 @@
+
+===== PAGE 1 =====
+Statistical Inference
+Sein Minn
+Asian Institute of Technology
+August 31, 2026
+Sein Minn|Asian Institute of Technology 1/148
+
+===== PAGE 2 =====
+Point Estimation and Confidence Intervals
+Sein Minn|Asian Institute of Technology 2/148
+
+===== PAGE 3 =====
+The Inference Problem: Generalizing from samples to populations
+Point Estimation and desirable estimator properties
+Maximum Likelihood Estimation (MLE)
+Bayesian Estimation and MAP
+Geometric interpretation of the mean
+Confidence Intervals and uncertainty quantification
+Large-sample and small-sample inference
+Sample size planning and margin of error
+Concentration bounds and learning theory
+Sein Minn|Asian Institute of Technology 3/148
+
+===== PAGE 4 =====
+What is an Estimate?
+Concepts
+Aparameteris a fixed but unknown quantity describing a population.
+Apoint estimateis our best numerical guess for the parameter.
+Anestimatoris the formula or rule used to compute the estimate.
+Examples
+Population mean:µ
+Sample mean estimator:
+¯x= 1
+n
+nX
+i=1
+xi
+Sein Minn|Asian Institute of Technology 4/148
+
+===== PAGE 5 =====
+Primary Statistical Estimators
+Estimator Symbol Estimates
+Sample Mean¯xPopulation Meanµ
+Sample ProportionˆpProbabilityp
+Sample Standard DeviationsPopulation Spreadσ
+Sample Mean Rate ˆλPoisson Rateλ
+Insight
+Estimators are themselves random variables because samples are random.
+Sein Minn|Asian Institute of Technology 5/148
+
+===== PAGE 6 =====
+Properties of Good Estimators
+Unbiasedness
+An estimator is unbiased if:
+E[ˆθ] =θ
+Examples
+E[¯x] =µ
+E[ˆp] =p
+Consistency
+As sample size increases:
+ˆθ→θ
+Variance
+Good estimators should have low variability across repeated samples.
+Sein Minn|Asian Institute of Technology 6/148
+
+===== PAGE 7 =====
+Why Divide byn−1?
+s2 = 1
+n−1
+nX
+i=1
+(xi −¯x)2
+Using¯xinstead of the true meanµmakes deviations artificially smaller.
+Dividing byn−1corrects this downward bias.
+n−1is called thedegrees of freedom.
+Result
+s2 becomes an unbiased estimator ofσ 2.
+Sein Minn|Asian Institute of Technology 7/148
+
+===== PAGE 8 =====
+Maximum Likelihood Estimation (MLE)
+Core Idea
+Choose the parameter value that makes the observed data most likely.
+Likelihood Function:
+L(θ|D) =P(D|θ)
+Coin Toss Example
+Observed: 62 heads in 100 tosses.
+L(r) =
+ 
+100
+62
+!
+r62(1−r) 38
+The maximizing value is:
+ˆr= 0.62
+Sein Minn|Asian Institute of Technology 8/148
+
+===== PAGE 9 =====
+The Log-Likelihood Trick
+Why Use Logarithms?
+Converts products into sums
+Simplifies derivatives and optimization
+Maximum remains unchanged
+log(ab) = loga+ logb
+Practical Advantage
+Most machine learning optimization algorithms maximizelog-likelihoodrather than likelihood directly.
+Sein Minn|Asian Institute of Technology 9/148
+
+===== PAGE 10 =====
+Gaussian Maximum Likelihood
+Assume:
+Xi ∼N(µ, σ 2)
+Log-likelihood:
+logL(µ) =
+X
+− 1
+2σ2 (xi −µ) 2
+
++C
+Optimization Result
+Maximizing likelihood is equivalent to minimizing:
+X
+(xi −µ) 2
+MLE Result
+ˆµM LE = ¯x
+Sein Minn|Asian Institute of Technology 10/148
+
+===== PAGE 11 =====
+Bayesian Estimation
+P(M odel|Data)∝P(Data|M odel)×P(M odel)
+Frequentist View
+Parameters are fixed
+Probability = long-run frequency
+Bayesian View
+Parameters are random
+Probability = degree of belief
+MAP Estimation
+ˆθM AP = arg maxP(θ|D)
+Sein Minn|Asian Institute of Technology 11/148
+
+===== PAGE 12 =====
+Geometric Interpretation of the Mean
+Centroid Interpretation
+The sample mean is the centroid (balance point) of the
+data.
+Objective:
+min
+z
+X
+(xi −z) 2
+Taking derivative:
+d
+dz
+X
+(xi −z) 2 = 0
+Result:
+z= ¯x
+Insight
+The mean minimizes total squared error.
+Sein Minn|Asian Institute of Technology 12/148
+
+===== PAGE 13 =====
+Confidence Intervals
+Purpose
+A confidence interval gives a range of plausible values for
+the parameter.
+Standard form:
+Estimate±Margin of Error
+Margin of Error:
+m=Critical Value×Standard Error
+Common Confidence Levels
+90%→z= 1.645
+95%→z= 1.960
+99%→z= 2.576
+Sein Minn|Asian Institute of Technology 13/148
+
+===== PAGE 14 =====
+Large Sample Confidence Intervals
+Mean Estimation
+¯x±zα/2
+ s√n
+
+Case Study
+n= 100,¯x= 47.08, s= 11.40
+95% CI:
+47.08±1.96
+ 11.40√
+100
+
+47.08±2.23
+Final interval:
+[44.85,49.31]
+Sein Minn|Asian Institute of Technology 14/148
+
+===== PAGE 15 =====
+Confidence Interval for Proportions
+Formula
+ˆp±zα/2
+r
+ˆp(1−ˆp)
+n
+Widely used in polling and survey analysis
+Requires:
+nˆp≥15
+n(1−ˆp)≥15
+Larger sample sizes produce narrower confidence intervals.
+Sein Minn|Asian Institute of Technology 15/148
+
+===== PAGE 16 =====
+Margin of Error and Sample Size
+m=z α/2 ×SE
+Required sample size:
+n=
+ zα/2σ
+m
+2
+Relationship
+SE∝ 1√n
+Consequence
+To reduce the margin of error by half, the sample size must increase by a factor of four.
+Sein Minn|Asian Institute of Technology 16/148
+
+===== PAGE 17 =====
+Comparing Two Population Means
+Difference of Means
+(¯x1 −¯x2)±z α/2
+s
+s2
+1
+n1
++ s2
+2
+n2
+Used in experiments and A/B testing
+Assumes samples are independent
+Decision Rule
+If the interval contains 0, there may be no statistically significant difference.
+Sein Minn|Asian Institute of Technology 17/148
+
+===== PAGE 18 =====
+Small Sample Inference: t-Distribution
+Problem
+For small samples, the Normal approximation is unreliable.
+¯x±tα/2
+ s√n
+
+Developed by William Sealy Gosset (“Student”)
+Depends on degrees of freedom:
+d f=n−1
+Has heavier tails than the Normal distribution
+Insight
+Asnincreases, the t-distribution approaches the standard Normal distribution.
+Sein Minn|Asian Institute of Technology 18/148
+
+===== PAGE 19 =====
+Concentration Bounds and PAC Learning
+For bounded random variables:
+P(|¯x−E[x]| ≥ϵ)≤2 exp
+ −2nϵ2
+(b−a) 2
+
+Failure probability decreases exponentially
+Foundation of machine learning generalization theory
+Supports Probably Approximately Correct (PAC) learning
+Big Picture
+More data improves reliability and reduces uncertainty.
+Sein Minn|Asian Institute of Technology 19/148
+
+===== PAGE 20 =====
+Ethical Considerations
+Removing outliers can distort inference
+Statistical significance does not imply practical importance
+Confidence intervals should accompany point estimates
+Assumptions and limitations must be reported transparently
+Responsible Data Science
+Inference should support truthful and interpretable decision-making.
+Sein Minn|Asian Institute of Technology 20/148
+
+===== PAGE 21 =====
+Point estimates summarize unknown parameters
+MLE and Bayesian methods provide estimation frameworks
+Confidence intervals quantify uncertainty
+Larger samples improve precision
+The mean minimizes squared error geometrically
+The t-distribution handles small-sample uncertainty
+Statistical inference transforms data into evidence.
+Sein Minn|Asian Institute of Technology 21/148
+
+===== PAGE 22 =====
+Hypothesis Testing: Null vs. Alternative
+Sein Minn|Asian Institute of Technology 22/148
+
+===== PAGE 23 =====
+The Core Concept: Making decisions about populations using sample data
+Defining Hypotheses: Null (H 0) vs. Alternative (H A)
+The Logic of Testing: The “Devil’s Advocate” perspective
+Test Statistics and Rejection Regions
+Type I and Type II Errors
+P-values and Statistical Significance
+Power and Sample Size
+Testing Means, Proportions, and Rates
+Practical vs. Statistical Significance
+Sein Minn|Asian Institute of Technology 23/148
+
+===== PAGE 24 =====
+What is a Hypothesis?
+Definition
+A hypothesis is a statement about a population parameter or population distribution.
+Usually written as a claim about a parameter
+Examples:
+Population meanµ
+Population proportionp
+Population rateλ
+Hypothesis testing uses sample evidence to evaluate these claims
+Goal
+Determine whether observed differences are due to random chance or reflect a real population effect.
+Sein Minn|Asian Institute of Technology 24/148
+
+===== PAGE 25 =====
+The Null Hypothesis (H 0)
+Definition
+The null hypothesis represents the “status quo” or “no
+effect” assumption.
+Assumed true unless evidence suggests otherwise
+Represents chance variation only
+Examples:
+H0 :µ=µ 0
+H0 :p=p 0
+Devil’s Advocate Logic
+We assume the treatment or difference has no
+effect until strong evidence proves otherwise.
+Sein Minn|Asian Institute of Technology 25/148
+
+===== PAGE 26 =====
+The Alternative Hypothesis (H A)
+Definition
+The alternative hypothesis represents the research claim or suspected effect.
+Indicates a difference or change
+Examples:
+HA :µ̸=µ 0
+HA :µ > µ 0
+HA :µ < µ 0
+Evidence againstH 0 supports the alternative hypothesis.
+Sein Minn|Asian Institute of Technology 26/148
+
+===== PAGE 27 =====
+Types of Alternative Hypotheses
+Two-Sided Test
+HA :µ̸=µ 0
+Detects any difference
+Most common in research
+One-Sided Test
+HA :µ > µ 0
+or
+HA :µ < µ 0
+Detects directional effects
+Used in quality control or safety
+Sein Minn|Asian Institute of Technology 27/148
+
+===== PAGE 28 =====
+Hypothesis Testing as a Legal Trial
+Presumption of Innocence
+H0 is assumed innocent
+Burden of proof lies withH A
+We either:
+RejectH 0
+Fail to RejectH 0
+Important
+We never “accept” the null hypothesis as absolutely true.
+Sein Minn|Asian Institute of Technology 28/148
+
+===== PAGE 29 =====
+Test Statistics
+General Form
+z= Estimate−Null Value
+Standard Error
+Measures how far the sample result is from the null hypothesis
+Expressed in standard error units
+Larger absolute values imply stronger evidence againstH 0
+Sein Minn|Asian Institute of Technology 29/148
+
+===== PAGE 30 =====
+Z-Test for Population Means
+Large Sample Z-Test
+z= ¯x−µ0
+s/√n
+¯x= sample mean
+s= sample standard deviation
+µ0 = hypothesized mean
+Valid when sample size is large
+Why It Works
+The Central Limit Theorem makes the sampling distribution approximately Normal.
+Sein Minn|Asian Institute of Technology 30/148
+
+===== PAGE 31 =====
+Rejection Regions
+Acceptance Region
+Differences are small enough to be explained by
+chance.
+Rejection Region
+Differences are too large to be explained by chance
+alone.
+|z| ≥z α/2
+If the statistic enters the rejection region, the result is statistically significant.
+Sein Minn|Asian Institute of Technology 31/148
+
+===== PAGE 32 =====
+Significance Level (α)
+Definition
+αis the probability of rejectingH 0 whenH 0 is actually true.
+Controls false positives
+Common choices:
+α= 0.05
+α= 0.01
+α= 0.10
+A 5% significance level means we accept a 5% risk of making a Type I error.
+Sein Minn|Asian Institute of Technology 32/148
+
+===== PAGE 33 =====
+Critical Values for Two-Sided Tests
+Confidence LevelαCritical Value
+90% 0.10 1.645
+95% 0.05 1.960
+99% 0.01 2.576
+RejectH 0 if|z| ≥z α/2
+Sein Minn|Asian Institute of Technology 33/148
+
+===== PAGE 34 =====
+Large-Sample Test for a Population Mean
+Objective:Test whether a population mean equals a specified value.
+Hypotheses
+H0 :µ=µ 0 vs.H A :µ̸=µ 0
+When the sample size is large (n≥30), the test statistic is
+z= ¯x−µ0
+s/√n ,
+where
+¯x= sample mean,
+s= sample standard deviation,
+n= sample size.
+Decision Rule (Two-Sided Test)
+RejectH 0, if|z| ≥z α/2.
+Sein Minn|Asian Institute of Technology 34/148
+
+===== PAGE 35 =====
+Serum Cholesterol Data
+Example: Serum Cholesterol Levels (mg/dL),n= 140
+126 165 180 200 212 225 240 261 299
+132 167 180 200 214 229 241 262 321
+138 169 180 201 216 229 241 265 324
+141 169 181 201 216 230 241 267 325
+147 169 183 202 216 230 243 268 327
+148 170 184 202 217 231 244 272 330
+153 170 184 203 218 231 245 273 340
+154 171 186 203 219 231 248 278 348
+154 173 189 204 220 231 250 278 352
+156 175 191 205 220 233 251 280 354
+157 176 193 206 221 234 251 281 361
+160 177 193 207 222 237 252 288 386
+160 177 194 207 222 237 254 289
+160 177 198 209 223 239 254 292
+163 178 199 209 223 239 255 292
+163 180 199 211 224 240 258 293
+Sein Minn|Asian Institute of Technology 35/148
+
+===== PAGE 36 =====
+Serum Cholesterol Levels: Summary of Serum Cholesterol Data
+Sample Size (n) 140
+Mean (¯x) 222.586 mg/dL
+Standard Deviation (s) 52.347 mg/dL
+Median 217.5 mg/dL
+Q1 180.25 mg/dL
+Q3 250.75 mg/dL
+IQR 70.5 mg/dL
+Outliers 361, 386
+Sein Minn|Asian Institute of Technology 36/148
+
+===== PAGE 37 =====
+Serum Cholesterol Levels: Mean Serum Cholesterol Level
+Is the mean serum cholesterol level of hypertensive male smokers equal to 211 mg/dL?
+Hypotheses
+H0 :µ= 211vs.H A :µ̸= 211
+Sample Information
+n= 140,¯x= 222.586, s= 52.347
+Significance Level
+α= 0.01
+Critical value:
+z0.005 = 2.576
+RejectH 0 if|z| ≥2.576.
+Sein Minn|Asian Institute of Technology 37/148
+
+===== PAGE 38 =====
+Mean Serum Cholesterol Level: Test Statistic Calculation
+z= ¯x−µ0
+s/√n = 222.586−211
+52.347/
+√
+140
+z= 2.619
+Decision
+|z|= 2.619>2.576
+Therefore,
+RejectH 0
+The observed difference between the sample mean
+(222.586 mg/dL) and the hypothesized mean (211
+mg/dL) is statistically significant at the 1%
+significance level.
+There is sufficient evidence to conclude that the
+population mean serum cholesterol level is not 211
+mg/dL.
+Since the sample mean is greater than 211 mg/dL,
+222.586>211,
+the evidence suggests that the true population mean
+is likelygreater than 211 mg/dL.
+Sein Minn|Asian Institute of Technology 38/148
+
+===== PAGE 39 =====
+Mean Serum Cholesterol Level: Relationship Between CI and
+Hypothesis Test
+A confidence interval provides an estimate of the
+population mean.
+¯x±z0.005
+s√n
+222.586±2.576
+52.347√
+140
+
+222.586±11.397
+[211.189,233.983]
+99% Confidence Interval
+[211.189,233.983]
+Hypothesized value:
+µ0 = 211
+Since
+211<211.189,
+the hypothesized value liesoutsidethe 99%
+confidence interval.
+Becauseµ 0 is not contained in the 99% confidence interval, we rejectH 0 at the 1% significance level.
+Sein Minn|Asian Institute of Technology 39/148
+
+===== PAGE 40 =====
+Z-Test for Population Proportion
+Formula
+z= ˆp−p0p
+p0(1−p 0)/n
+Used for binary outcomes
+Conditions:
+np0 ≥15
+n(1−p 0)≥15
+Sein Minn|Asian Institute of Technology 40/148
+
+===== PAGE 41 =====
+P-Values
+Definition
+The P-value is the probability of observing a result at least as extreme as the sample result, assumingH 0 is true.
+P-value= 2P(Z≥ |z obs|)
+Small P-value⇒evidence againstH 0
+Large P-value⇒data compatible withH 0
+Sein Minn|Asian Institute of Technology 41/148
+
+===== PAGE 42 =====
+P-Values vs. Alpha
+IfP≤α
+RejectH 0
+IfP > α
+Fail to RejectH 0
+The P-value measures the strength of evidence against the null hypothesis.
+Sein Minn|Asian Institute of Technology 42/148
+
+===== PAGE 43 =====
+Example: Gender Bias in Management Training
+Scenario
+A women’s group claimed that female employees were less likely to be selected for management training.
+Company’s Claim
+Selections were made randomly from the eligible pool.
+Population Composition
+40% Female
+60% Male
+Training Program Data
+Total selected:n= 40
+Women selected:12
+Men selected:28
+Sein Minn|Asian Institute of Technology 43/148
+
+===== PAGE 44 =====
+Example: Why Not 50%?
+Suppose the eligible employee pool contains:
+40%women60%men
+If 100 employees are selected randomly, we would expect
+100(0.40) = 40
+women and
+100(0.60) = 60
+men.
+Therefore, underno bias,
+p= 0.40.
+Sein Minn|Asian Institute of Technology 44/148
+
+===== PAGE 45 =====
+Hypothesis Test for a Population Proportion
+Is the observed proportion (30%) sufficiently different from the expected proportion (40%) to conclude that the
+selection process was not random?
+Letpdenote the proportion of women selected for management training.
+Hypotheses
+H0 :p= 0.40 HA :p̸= 0.40
+Significance Level
+α= 0.05
+Critical value:
+z0.025 = 1.96
+RejectH 0 if
+|z| ≥1.96.
+Sein Minn|Asian Institute of Technology 45/148
+
+===== PAGE 46 =====
+Computing the Test Statistic
+Sample Proportion
+ˆp=12
+40 = 0.30
+Standard Error underH 0
+SE(ˆp) =
+r
+p0(1−p 0)
+n =
+r
+(0.40)(0.60)
+40
+Test Statistic
+z= ˆp−p0q
+p0(1−p0)
+n
+z= 0.30−0.40q
+(0.40)(0.60)
+40
+=−1.291
+Sein Minn|Asian Institute of Technology 46/148
+
+===== PAGE 47 =====
+Decision and Interpretation
+z=−1.291
+|z|= 1.291
+Critical value:
+1.96
+Since
+1.291<1.96,
+wefail to rejectH 0.
+The observed difference could reasonably have occurred by chance.
+Sein Minn|Asian Institute of Technology 47/148
+
+===== PAGE 48 =====
+Relationship Between CI and Hypothesis Test
+Confidence Interval Formula
+ˆp±z0.025
+r
+ˆp(1−ˆp)
+n
+0.30±1.96
+r
+(0.30)(0.70)
+40
+0.30±0.142
+[0.158,0.442]
+95% Confidence Interval
+[0.158,0.442]
+Hypothesized value:
+p0 = 0.40
+Since
+0.40∈[0.158,0.442],
+the hypothesized proportion is contained in the
+confidence interval.
+The confidence interval supports the hypothesis test conclusion: there is insufficient evidence of gender bias in
+the selection process.
+Sein Minn|Asian Institute of Technology 48/148
+
+===== PAGE 49 =====
+Is There Evidence of Gender Bias?
+Observed Data
+Expected proportion of women:p 0 = 0.40
+Observed proportion of women selected:
+ˆp=12
+40 = 0.30
+Although fewer women were selected than expected, we must determine whether this difference is large enough
+to rule out chance variation.
+Sein Minn|Asian Institute of Technology 49/148
+
+===== PAGE 50 =====
+Statistical Conclusion
+There is insufficient evidence at the 5% significance level to conclude that gender bias exists in the selection
+process.
+The observed difference between
+40%and30%
+could reasonably have occurred by chance.
+What We Can Say
+No statistically significant evidence of bias was found.
+What We Cannot Say
+The selection process is proven to be unbiased.
+Failing to rejectH 0 does not prove thatH 0 is true; it only indicates that the data do not provide strong enough
+evidence against it.
+Sein Minn|Asian Institute of Technology 50/148
+
+===== PAGE 51 =====
+Interpreting a 5% Significance Level
+Suppose the company’s selection process is truly unbiased:
+H0 :p= 0.40
+If we repeatedly take samples and perform the test,
+About 95% of the time, we will correctly fail to rejectH 0.
+About 5% of the time, random variation may lead us to rejectH 0 even though it is true.
+Thus,
+α= 0.05
+controls the risk of a false alarm.
+Sein Minn|Asian Institute of Technology 51/148
+
+===== PAGE 52 =====
+5% Significance Level and Critical Values
+For a two-sided test with
+α= 0.05,
+the rejection region is
+|z| ≥1.96.
+2.5%|{z}
+RejectH 0
+95%|{z}
+Fail to RejectH 0
+2.5%|{z}
+RejectH 0
+The total probability in the two tails is
+2.5% + 2.5% = 5%.
+Sein Minn|Asian Institute of Technology 52/148
+
+===== PAGE 53 =====
+Is There Evidence of Gender Bias?
+Insufficient evidence of gender bias
+Expected proportion of women:40%
+Observed proportion of women:30%
+Test statistic:z=−1.291
+Critical value:±1.96
+Decision: Fail to rejectH 0
+The difference observed in the sample is not statistically significant at the 5% level.
+Sein Minn|Asian Institute of Technology 53/148
+
+===== PAGE 54 =====
+Why isp= 0.40? and Notp= 0.50?
+The company states that the pool of eligible
+employees consists of
+40%women60%men
+If employees are selected randomly, the probability
+that a selected employee is a woman should be
+p= 0.40.
+Therefore, the company’s claim of no gender bias is
+H0 :p= 0.40.
+The hypothesis test examines whether the observed
+sample proportion differs significantly from 0.40.
+Fair selection means that the selected group should
+reflect the composition of the eligible pool.
+Eligible employees:
+40%women60%men
+Therefore, under random selection,
+p= 0.40.
+A null hypothesis of
+p= 0.50
+would only be appropriate if the eligible pool were
+50% women and 50% men, or if equal representation
+were required by policy.
+Sein Minn|Asian Institute of Technology 54/148
+
+===== PAGE 55 =====
+What Would Happen if We Usedp= 0.50?
+Suppose there are 1,000 eligible employees:
+Gender Number Percentage
+Women 400 40%
+Men 600 60%
+Total 1000 100%
+If 100 employees are selected:
+Expected under random selection:
+40women,60men
+Expected underp= 0.50:
+50women,50men
+The second expectation doesnotmatch the population composition.
+Sein Minn|Asian Institute of Technology 55/148
+
+===== PAGE 56 =====
+Fairness vs. Equal Numbers
+Fair Selection
+Selected employees reflect the composition of the eligible pool.
+Example
+Eligible Pool:
+40%women60%men
+Random Selection:
+40%women60%men
+This is consideredunbiased, even though the proportions are not 50%-50%.
+No Bias̸=Equal Numbers
+No Bias=Representative of the Population
+For this example,
+H0 :p= 0.40
+because 40% of the eligible employees are women.
+Sein Minn|Asian Institute of Technology 56/148
+
+===== PAGE 57 =====
+Decision Outcomes
+H0 True H0 False
+Fail to RejectH 0 Correct Type II Error (β)
+RejectH 0 Type I Error (α) Correct (Power)
+Sein Minn|Asian Institute of Technology 57/148
+
+===== PAGE 58 =====
+Type I Error
+Definition
+Rejecting the null hypothesis when it is actually true.
+P(Type I Error) =α
+False positive
+Concluding an effect exists when it does not
+Analogy
+Convicting an innocent person.
+Sein Minn|Asian Institute of Technology 58/148
+
+===== PAGE 59 =====
+Type II Error
+Definition
+Failing to reject the null hypothesis when it is actually false.
+P(Type II Error) =β
+False negative
+Missing a real effect
+Analogy
+Allowing a guilty person to go free.
+Sein Minn|Asian Institute of Technology 59/148
+
+===== PAGE 60 =====
+Power of a Test
+Definition
+Power= 1−β
+Probability of correctly rejecting a false null
+hypothesis
+High power means the test can detect
+meaningful differences
+Desired power is commonly:
+80%or90%
+Sein Minn|Asian Institute of Technology 60/148
+
+===== PAGE 61 =====
+What Drives Statistical Power?
+1 Effect Size
+Larger differences are
+easier to detect
+2 Sample Size
+Larger samples increase
+power
+3 Significance Level
+Smallerαreduces power
+4 Variability
+Lower variance improves
+power
+Sein Minn|Asian Institute of Technology 61/148
+
+===== PAGE 62 =====
+Comparing Two Means
+Hypotheses
+H0 :µ 1 =µ 2
+HA :µ 1 ̸=µ 2
+z= ¯x1 −¯x2p
+s2
+1/n1 +s 2
+2/n2
+Assumes independent samples
+Valid for large sample sizes
+Sein Minn|Asian Institute of Technology 62/148
+
+===== PAGE 63 =====
+Comparing Two Proportions
+Pooled Proportion
+ˆp= x1 +x 2
+n1 +n 2
+z= ˆp1 −ˆp2p
+ˆp(1−ˆp)(1/n1 + 1/n2)
+Common in medical and survey studies
+Tests whether two success probabilities differ
+Sein Minn|Asian Institute of Technology 63/148
+
+===== PAGE 64 =====
+Student t-Distribution
+Why Do We Need It?
+For small samples, the sample standard deviation is unstable.
+Sampling distribution has heavier tails
+Depends on degrees of freedom:
+d f=n−1
+Asd f→ ∞, the t-distribution approaches the Normal distribution
+Small Sample t-Test
+Formula
+t= ¯x−µ0
+s/√n
+Used when sample size is small
+Population should be approximately Normal
+Compare againstt α/2
+Sein Minn|Asian Institute of Technology 64/148
+
+===== PAGE 65 =====
+Practical vs. Statistical Significance
+Statistical Significance
+Difference unlikely due to chance.
+Practical Significance
+Difference large enough to matter in reality.
+Large Sample Trap
+With huge samples, even tiny meaningless differences may become statistically significant.
+Sein Minn|Asian Institute of Technology 65/148
+
+===== PAGE 66 =====
+Ethics: P-Hacking
+P-Hacking
+Running many tests and reporting only significant results.
+Multiple testing inflates false positives
+Atα= 0.05, about 1 in 20 tests becomes significant by chance
+Best Practices in Hypothesis Testing
+1 Clearly defineH 0 andH A
+2 Report exact P-values
+3 Include confidence intervals
+1 Discuss practical importance
+2 Check assumptions carefully
+3 Avoid selective reporting
+Report all analyses transparently and include confidence intervals.
+Sein Minn|Asian Institute of Technology 66/148
+
+===== PAGE 67 =====
+Summary of Hypothesis Testing
+1 State hypotheses
+2 Choose significance levelα
+3 Compute test statistic
+1 Determine P-value
+2 Make a decision
+3 Interpret results in context
+Hypothesis testing protects us from being fooled by random noise.
+Hypothesis testing is not just about formulas and P-values.
+It is about making disciplined decisions under uncertainty using evidence from data.
+Always interpret statistics within the real-world context of the
+problem.
+Sein Minn|Asian Institute of Technology 67/148
+
+===== PAGE 68 =====
+Small Sample Analysis: Student t-distributions
+Sein Minn|Asian Institute of Technology 68/148
+
+===== PAGE 69 =====
+The Small Sample Problem: Why the Normal distribution fails for smalln
+Foundations: Unbiased variance estimation and then−1correction
+The Studentt-Distribution and degrees of freedom
+Single Sample, Paired Sample, and Independent Sample inference
+Welch’st-methods for unequal variances
+Practical vs. Statistical Significance in small studies
+Bayesian interpretation of the Studentt-distribution
+Sein Minn|Asian Institute of Technology 69/148
+
+===== PAGE 70 =====
+Large Sample Inference Recap
+Central Limit Theorem
+For sufficiently large samples, the sampling distribution of the mean is approximately Normal.
+z= ¯x−µ
+σ/√n
+When population standard deviationσis unknown, we substitute sample SDs.
+For largen,sis a stable estimate ofσ.
+This justifies the use of Z-methods in large-sample inference.
+Sein Minn|Asian Institute of Technology 70/148
+
+===== PAGE 71 =====
+Why Small Samples Are Different
+The Problem
+Whenn <30, the sample standard deviationsbecomes unstable.
+Additional uncertainty is introduced becausesvaries from sample to sample.
+Standard Normal critical values become too optimistic.
+Confidence intervals become too narrow.
+Hypothesis tests reject the null hypothesis too often.
+Small samples require a distribution with heavier tails to account for uncertainty.
+Sein Minn|Asian Institute of Technology 71/148
+
+===== PAGE 72 =====
+The Origin of the Student t-Distribution
+Developed byWilliam Sealy Gossetat Guinness Breweries.
+Published under the pseudonym“Student”in 1908.
+Designed for analyzing small industrial experiments.
+Bridged theoretical statistics with real-world data analysis.
+Historical Importance
+The Studentt-distribution enabled reliable inference from small datasets.
+Sein Minn|Asian Institute of Technology 72/148
+
+===== PAGE 73 =====
+The Sample Variance Problem
+If the true population meanµwere known:
+σ2 ≈ 1
+n
+nX
+i=1
+(xi −µ) 2
+In practice, we replaceµwith the sample mean¯x.
+Consequence
+Using¯xmakes the squared deviations artificially smaller.
+X
+(xi −¯x)2 ≤
+X
+(xi −µ) 2
+Sein Minn|Asian Institute of Technology 73/148
+
+===== PAGE 74 =====
+Why Divide byn−1?
+Unbiased Sample Variance
+s2 = 1
+n−1
+nX
+i=1
+(xi −¯x)2
+Dividing bynunderestimates the true population variance.
+The correction factorn−1removes this bias.
+n−1is called thedegrees of freedom.
+Once the sample mean is fixed, onlyn−1observations are free to vary independently.
+Sein Minn|Asian Institute of Technology 74/148
+
+===== PAGE 75 =====
+The Student t-Statistic
+Replacingσwithsgives the standardized statistic:
+t= ¯x−µ
+s/√n
+Follows a Studentt-distribution.
+Degrees of freedom:
+d f=n−1
+Symmetric and bell-shaped like the Normal distribution.
+Has heavier tails than the Standard Normal.
+Sein Minn|Asian Institute of Technology 75/148
+
+===== PAGE 76 =====
+Properties of the t-Distribution
+Centered at zero
+Symmetric distribution
+Heavy tails for smalld f
+More spread than the Normal distribution
+Asymptotic Behavior
+Asd f→ ∞, the Studentt-distribution
+converges to the Standard Normal distri-
+bution.
+Sein Minn|Asian Institute of Technology 76/148
+
+===== PAGE 77 =====
+The Normality Assumption
+Critical Assumption
+Small-samplet-methods assume the population
+distribution is approximately Normal.
+Small samples are sensitive to skewness and
+outliers.
+The Central Limit Theorem is not strong enough
+whennis very small.
+Analysts should inspect:
+Histograms
+Box plots
+Q-Q plots
+Sein Minn|Asian Institute of Technology 77/148
+
+===== PAGE 78 =====
+Single Sample Confidence Interval
+100(1−α)%Confidence Interval
+¯x±tα/2
+ s√n
+
+Where:
+¯x= sample mean
+tα/2 = critical value fromt-table
+s/√n= estimated standard error
+Sein Minn|Asian Institute of Technology 78/148
+
+===== PAGE 79 =====
+Example: Bone Health Study
+Researchers investigated daily calcium intake among women aged 19–25 years living in the greater Bangkok area.
+Sample
+Simple random sample
+Sample size:n= 24
+Response variable: Daily calcium intake (mg/day)
+Observed Calcium Intake (mg)
+269,283,436,613,706,747,796,877,927,1004,1009,1019,
+1086,1106,1182,1196,1199,1258,1272,1281,1506,1540,1928,2043
+Sein Minn|Asian Institute of Technology 79/148
+
+===== PAGE 80 =====
+Bone Health Study: Assessing the Normality Assumption
+Similar spread above and below the median
+No severe departures from symmetry
+The single outlier is close to the upper whisker
+Histogram approximately symmetric
+Boxplot approximately symmetric
+One mild upper outlier
+No evidence of strong skewness
+Population distribution appears approximately normal
+Therefore, a one-sampletprocedure is appropriate for
+inference on the population mean calcium intake.
+Sein Minn|Asian Institute of Technology 80/148
+
+===== PAGE 81 =====
+Why can we use a One-SampletTest?
+The assumptions are reasonably satisfied:
+1 Simple random sample
+2 Independent observations
+3 Population distribution approximately normal
+4 No extreme outliers
+Inference Target
+µ=Mean daily calcium intake of women aged 19–25
+The appropriate test statistic is
+t= ¯x−µ0
+s/√n
+with
+d f=n−1 = 23.
+Use a One-SampletTest (or CI forµ)
+Sein Minn|Asian Institute of Technology 81/148
+
+===== PAGE 82 =====
+Bone Health Study: 95% Confidence Interval for Mean Calcium
+Intake
+Estimate the population mean daily calcium intake (µ) for women aged 19–25.
+Sample Statistics
+n= 24 ¯x= 1053.46mg s= 442.653mg d f=n−1 = 23
+For a 95% confidence interval,
+t0.025,23 = 2.069
+Confidence Interval Formula
+¯x±tα/2,,d f
+ s√n
+
+1053.46±2.069
+442.653√
+24
+
+1053.46±186.947
+[866.513,; 1240.410]
+Sein Minn|Asian Institute of Technology 82/148
+
+===== PAGE 83 =====
+Bone Health Study: Interpretation of the 95% Confidence Interval
+[866.5,1240.4]mg
+We are 95% confident that the population mean daily calcium intake of women aged 19–25 in the greater
+Bangkok area lies between
+866.5mg and1240.4mg.
+The confidence level refers to the method:
+If many random samples of size 24 were selected,
+and a 95% confidence interval were constructed from each sample,
+approximately 95% of those intervals would contain the true population meanµ.
+Sein Minn|Asian Institute of Technology 83/148
+
+===== PAGE 84 =====
+Single Sample Hypothesis Test
+Testing the Mean
+H0 :µ=µ 0 HA :µ̸=µ 0
+t= ¯x−µ0
+s/√n
+RejectH 0 if:
+|t| ≥t α/2
+Degrees of freedom:
+d f=n−1
+Sein Minn|Asian Institute of Technology 84/148
+
+===== PAGE 85 =====
+Example: Cataract Surgery Times
+Is the mean cataract surgery time different from the historical average of 0.75 hours?
+Sample Information
+Simple random sample of adults undergoing
+cataract surgery
+Sample size:n= 24
+Historical mean:µ 0 = 0.75hours
+Cataract Surgery Times (n= 24)
+0.25 0.38 0.42 0.43 0.45
+0.48 0.48 0.50 0.55 0.57
+0.60 0.60 0.62 0.68 0.75
+0.75 0.77 0.77 0.80 0.80
+0.88 1.03 1.17 1.25
+Assumptions
+Random sample
+Independent observations
+Boxplot approximately symmetric
+No serious outliers
+One-SampletTest is appropriate
+Sein Minn|Asian Institute of Technology 85/148
+
+===== PAGE 86 =====
+Cataract Surgery Times: Hypothesis Test for the Mean
+Hypotheses
+H0 :µ= 0.75 Ha :µ̸= 0.75
+Sample Statistics
+¯x= 0.666 s= 0.246 n= 24 d f=n−1 = 23
+Test Statistic
+t= ¯x−µ0
+s/√n = 0.666−0.75
+0.246/
+√
+24
+=−1.673
+Critical value forα= 0.05:
+Test Statistic
+t= 0.666−0.75
+0.246/
+√
+24
+=−1.673
+Decision Rule
+|t|<2.069
+Fail to rejectH 0. The observed difference
+could reasonably occur due to chance.
+Sein Minn|Asian Institute of Technology 86/148
+
+===== PAGE 87 =====
+Paired Sample Designs
+Core Idea
+Paired studies reduce variability by comparing measurements within the same subject.
+Examples:
+Before vs. after treatment
+Twin studies
+Matched experimental pairs
+Define differences:
+di =x 1i −x 2i
+Then perform a single-samplet-analysis on the differences.
+Sein Minn|Asian Institute of Technology 87/148
+
+===== PAGE 88 =====
+Example: Cell Phone Use and Reaction Time
+Does using a cell phone impair reaction time during a driving skills test?
+A sample ofn= 32students completed the task:
+1 Without a cell phone (warm-up period)
+2 While talking on a cell phone (test period)
+Paired Data
+For each student,
+d=Reaction Time with Phone−Reaction Time without Phone
+d >0: slower reaction when using a phone
+d <0: faster reaction when using a phone
+Sein Minn|Asian Institute of Technology 88/148
+
+===== PAGE 89 =====
+Average Reaction Times and Differences
+Difference = Average Time with Phone−Average Time without Phone
+With Phone Without Phone Difference
+595 619 -24
+543 556 -13
+520 531 -11
+501 508 -7
+536 543 -7
+468 470 -2
+521 527 -6
+448 525 8
+515 609 10
+599 573 26
+554 535 19
+482 462 20
+537 542 22
+513 565 29
+536 636 29
+604 558 32
+With Phone Without Phone Difference
+519 574 39
+529 600 45
+544 578 56
+512 623 66
+556 560 67
+487 414 73
+615 540 75
+554 470 84
+467 554 87
+679 589 90
+626 525 101
+688 558 130
+601 459 142
+960 814 146
+647 499 148
+672 522 150
+Sein Minn|Asian Institute of Technology 89/148
+
+===== PAGE 90 =====
+Cell Phone Use and Reaction Time: Summary Statistics
+Sample Means
+¯x1 = 585.187
+¯x2 = 534.562
+where
+¯x1 = mean reaction time with a cell phone
+¯x2 = mean reaction time without a cell phone
+Mean Difference
+¯d= ¯x1 −¯x2 = 585.187−534.562 = 50.625
+On average, reaction times increased by approximately50.6 millisecondswhen using a cell phone.
+Sein Minn|Asian Institute of Technology 90/148
+
+===== PAGE 91 =====
+Cell Phone Use and Reaction Time: 99% Confidence Interval
+Given
+¯d= 50.625, s d = 52.486, n= 32
+t0.005,31 = 2.744
+¯d±t
+ sd√n
+
+50.625±2.744
+52.486√
+32
+
+50.625±25.459
+[25.166,76.084]
+Sein Minn|Asian Institute of Technology 91/148
+
+===== PAGE 92 =====
+Cell Phone Use and Reaction Time: Paired t-Test
+Hypotheses
+H0 :µ d = 0
+Ha :µ d ̸= 0
+Test Statistic
+t=
+¯d−0
+sd/√n = 50.625
+52.486/
+√
+32
+= 5.456
+Critical value:
+|t| ≥2.744
+Since
+5.456>2.744,
+Since|t|>2.744 , we rejectH 0 at the 1%
+significance level.
+Sein Minn|Asian Institute of Technology 92/148
+
+===== PAGE 93 =====
+Cell Phone Use and Reaction Time: Conclusion
+Results
+Mean Difference 50.625
+Standard Error 9.278
+99% CI [25.166, 76.084]
+t-statistic 5.456
+p-value<0.001
+The results are statistically significant at the 1% level.
+Students reacted more slowly while using a cell phone.
+Mean reaction times increased by approximately 25 to 76 milliseconds.
+Sein Minn|Asian Institute of Technology 93/148
+
+===== PAGE 94 =====
+Independent Samples
+Goal
+Compare two separate population means:
+µ1 −µ 2
+Challenges:
+Different sample sizes
+Unequal population variances
+Additional uncertainty from combining two estimates
+Welch’st-method handles unequal variances robustly.
+Sein Minn|Asian Institute of Technology 94/148
+
+===== PAGE 95 =====
+Welch’s t-Interval
+Difference in Means
+(¯x1 −¯x2)±t α/2
+s
+s2
+1
+n1
++ s2
+2
+n2
+Welch-Satterthwaite Degrees of Freedom
+d f=
+
+s2
+1
+n1
++
+s2
+2
+n2
+2
+(s2
+1/n1)2
+n1−1 +
+(s2
+2/n2)2
+n2−1
+Sein Minn|Asian Institute of Technology 95/148
+
+===== PAGE 96 =====
+Example: Calcium Supplements and Blood Pressure
+Double-Blind Experiment
+Do calcium supplements reduce systolic blood pressure (SBP)?
+Double-blind, placebo-controlled experiment.
+21 adult men were randomly assigned to:
+Calcium group (n 1 = 10)
+Placebo group (n 2 = 11)
+Response Variable
+Decrease=Beginning SBP−Ending SBP
+Positive value⇒blood pressure decreased.
+Negative value⇒blood pressure increased.
+Sein Minn|Asian Institute of Technology 96/148
+
+===== PAGE 97 =====
+Summary Statistics
+Sample Means
+¯x1 = 5.000
+¯x2 =−0.636
+where
+¯x1 = mean decrease for
+Calcium group
+¯x2 = mean decrease for
+Placebo group
+Difference in Means
+¯x1 −¯x2 = 5.000−(−0.636) = 5.636mmHg
+Sein Minn|Asian Institute of Technology 97/148
+
+===== PAGE 98 =====
+Welch Degrees of Freedom
+For independent samples with unequal variances,
+d f=
+
+s2
+1
+n1
++
+s2
+2
+n2
+2
+
+s2
+1
+n1
+2
+n1−1 +
+
+s2
+2
+n2
+2
+n2−1
+Substituting the sample values:
+d f=
+
+8.7432
+10 + 5.8702
+11
+2
+
+8.7432
+10
+2
+9 +
+
+5.8702
+11
+2
+10
+d f= 15.54≈16
+Sein Minn|Asian Institute of Technology 98/148
+
+===== PAGE 99 =====
+95% Confidence Interval
+Given:s 1 = 8.743, s 2 = 5.870
+SE=
+s
+s2
+1
+n1
++ s2
+2
+n2
+= 3.283
+Welch degrees of freedom:
+d f≈16
+t0.025,16 = 2.120
+(¯x1 −¯x2)±t ∗SE
+5.636±(2.120)(3.283)
+5.636±6.960
+[−1.324,12.596]
+Sein Minn|Asian Institute of Technology 99/148
+
+===== PAGE 100 =====
+Welch Two-Sample t-Test
+Hypotheses
+H0 :µ 1 =µ 2
+Ha :µ 1 ̸=µ 2
+Test Statistic
+t= ¯x1 −¯x2q
+s2
+1
+n1
++
+s2
+2
+n2
+= 5.636
+3.283 = 1.717
+Critical value:
+|t| ≥2.120
+Since
+1.717<2.120,
+we fail to rejectH 0.
+Sein Minn|Asian Institute of Technology 100/148
+
+===== PAGE 101 =====
+Conclusion
+Difference in Means 5.636
+Standard Error 3.283
+Degrees of Freedom 16
+95% CI[−1.324,12.596]
+t-statistic 1.717
+p-value 0.1053
+Conclusion
+The difference is not statistically significant at the 5% level.
+The confidence interval contains 0.
+The observed difference could reasonably be due to sampling variation.
+There is insufficient evidence that calcium supplements reduce blood pressure.
+Sein Minn|Asian Institute of Technology 101/148
+
+===== PAGE 102 =====
+Efficiency of Paired Designs
+Pairing reduces unexplained variability.
+Highly correlated measurements produce more powerful tests.
+Paired methods often require much smaller sample sizes.
+Insight
+The same dataset may be statistically significant when analyzed as paired data but non-significant when treated
+as independent samples.
+Sein Minn|Asian Institute of Technology 102/148
+
+===== PAGE 103 =====
+Practical vs. Statistical Significance
+SmallnProblem
+Large differences may fail to reach statistical
+significance because the study lacks power.
+Insight
+Non-significant does not always mean “unimportant.”
+Researchers should distinguish between:
+Statistical evidence
+Clinical or practical importance
+Sein Minn|Asian Institute of Technology 103/148
+
+===== PAGE 104 =====
+Bayesian Interpretation of t
+Bayesian Origin
+If the variance is unknown and modeled probabilistically, integrating over uncertainty in variance naturally
+produces a Studentt-distribution.
+Gaussian likelihood with unknown variance
+Gamma prior on precisionσ −2
+Posterior predictive distribution becomes Studentt
+Unified Perspective
+The Studentt-distribution emerges naturally from uncertainty about variance.
+Sein Minn|Asian Institute of Technology 104/148
+
+===== PAGE 105 =====
+When Normality Fails
+If the population is strongly skewed or contains extreme outliers, use non-parametric methods.
+Paired Data
+Wilcoxon Signed Rank Test
+Independent Data
+Mann-Whitney Rank Sum Test
+These methods useranksrather than raw values.
+Sein Minn|Asian Institute of Technology 105/148
+
+===== PAGE 106 =====
+Checklist for t-Methods
+1 Is the goal to estimate or test a population mean?
+2 Is the sample size small?
+3 Is the population approximately Normal?
+4 Have the correct degrees of freedom been identified?
+5 Is the study paired or independent?
+Sein Minn|Asian Institute of Technology 106/148
+
+===== PAGE 107 =====
+Comparison Table
+SettingDegrees of Freedom Method
+Single Samplen−1Single Samplet
+Paired Samplen−1Pairedt
+Independent SamplesWelch Formula Independentt
+Large Samplen→ ∞Z-methods
+Sein Minn|Asian Institute of Technology 107/148
+
+===== PAGE 108 =====
+Small samples require Studentt-methods instead of Z-methods.
+Then−1correction removes bias in variance estimation.
+The Studentt-distribution has heavier tails to reflect uncertainty.
+Paired designs dramatically improve statistical efficiency.
+Statistical significance should always be interpreted alongside practical importance.
+Reliable inference begins with understanding uncertainty.
+Sein Minn|Asian Institute of Technology 108/148
+
+===== PAGE 109 =====
+Nonparametric Methods: Rank Sum and Signed Rank Tests
+Sein Minn|Asian Institute of Technology 109/148
+
+===== PAGE 110 =====
+Nonparametric Methods
+Nonparametric Foundations: Why and when to avoid normality assumptions.
+The Logic of Ranks: Transforming data to eliminate outlier influence.
+Signed Rank Test: Analyzing paired differences and symmetric distributions.
+Rank Sum Test: Comparing centers of two independent samples.
+Mechanics: Statistics, sampling distributions, and critical values.
+Inference Models: Population vs. Randomization perspectives.
+Case Studies: Clinical trials in lung function, anorexia, and dietary supplements.
+Comparison: Nonparametric vs. Student t-methods.
+Sein Minn|Asian Institute of Technology 110/148
+
+===== PAGE 111 =====
+What are Nonparametric Methods?
+Definition
+Standard parametric tests (such as Z-tests and t-tests) assume the data follow a specific probability distribution,
+usually the Normal distribution.
+Idea
+Nonparametric methods avoid strong distributional assumptions and remain valid even when the population
+distribution is skewed or contains outliers.
+Useful when normality assumptions fail.
+Robust against extreme observations.
+Appropriate for ordinal or ranked data.
+Widely used in medical and clinical research.
+Sein Minn|Asian Institute of Technology 111/148
+
+===== PAGE 112 =====
+The Power of Ranks
+Core Principle
+Instead of analyzing raw numerical values, nonparametric methods analyze theranksof observations.
+Advantages
+Resistant to outliers.
+Works with ordinal data.
+Handles skewed distributions.
+Reduces influence of extreme values.
+Ranks focus on:
+Relative Position
+rather than:
+Absolute Magnitude
+Sein Minn|Asian Institute of Technology 112/148
+
+===== PAGE 113 =====
+Historical Background
+Pioneers of Rank-Based Methods
+Frank Wilcoxon developed signed-rank and rank-sum tests in the 1940s.
+Wilcoxon worked as an industrial chemist analyzing noisy chemical data.
+Kruskal and Wallis later extended these methods to multiple groups.
+Today, nonparametric methods are standard tools in biostatistics and clinical trials.
+Historical Insight
+Nonparametric methods became popular because real-world data rarely behave perfectly normally.
+Sein Minn|Asian Institute of Technology 113/148
+
+===== PAGE 114 =====
+When to Use the Signed Rank Test
+Purpose
+The Wilcoxon Signed Rank Test is used for:
+Paired samples (before vs. after).
+Matched observations.
+Single-sample median testing.
+Hypothesis
+H0 :Median Difference= 0
+HA :Median Difference̸= 0
+Nonparametric alternative to the paired t-test.
+Assumes the distribution of differences is approximately symmetric.
+Sein Minn|Asian Institute of Technology 114/148
+
+===== PAGE 115 =====
+Steps in the Signed Rank Test
+1 Compute paired differences:
+di =x 1i −x 2i
+2 Remove any zero differences.
+3 Rank the absolute differences:
+|di|
+4 Attach the original sign to each rank.
+5 Compute:
+S+ =Sum of positive ranks
+S− =Sum of negative ranks
+Decision Logic
+If the null hypothesis is true, positive and negative ranks should be approximately balanced.
+Sein Minn|Asian Institute of Technology 115/148
+
+===== PAGE 116 =====
+Example: Signed Rank Calculation
+Observed Differences
+−12,−1,4,5,17
+Absolute Differences
+1,4,5,12,17
+Ranks:
+1,2,3,4,5
+Signed Ranks
+−4,−1,2,3,5
+S+ = 2 + 3 + 5 = 10
+S− = 1 + 4 = 5
+Sein Minn|Asian Institute of Technology 116/148
+
+===== PAGE 117 =====
+Handling Tied Observations
+Tied Absolute Differences
+If two observations have identical absolute values, assign them the average rank.
+Example
+Differences:
+2,3,3,6
+Rank of 2:
+1
+Two values of 3 occupy ranks 2 and 3:
+2 + 3
+2 = 2.5
+Rank of 6:
+4
+Sein Minn|Asian Institute of Technology 117/148
+
+===== PAGE 118 =====
+Distribution Under the Null Hypothesis
+Sampling Logic
+Under the null hypothesis, positive and negative signs are equally likely.
+E(S) = n(n+ 1)
+4
+SD(S) =
+r
+n(n+ 1)(2n+ 1)
+24
+Distribution is symmetric.
+For large samples, the distribution approaches Normality.
+Small samples produce discrete “step-like” distributions.
+Sein Minn|Asian Institute of Technology 118/148
+
+===== PAGE 119 =====
+Standardized Signed Rank Statistic
+Large Sample Approximation
+For large samples:
+n >40
+the signed-rank statistic is approximately Normal.
+zS = S−E(S)
+SD(S)
+Decision Rule
+Reject:
+H0
+if:
+|zS| ≥z α/2
+Sein Minn|Asian Institute of Technology 119/148
+
+===== PAGE 120 =====
+Case Study: Amiloride Treatment
+Cystic fibrosis is a genetic disease affecting mucus and sweat glands.
+Thick mucus accumulates in the lungs and obstructs airways.
+Researchers investigated whetheramiloridecould slow the loss of lung function.
+A double-blind crossover study was conducted on14 patients.
+Study Design
+Each patient received both treatments:
+Placebo
+Amiloride
+Treatment order was randomized.
+Neither patients nor physicians knew the treatment order.
+Sein Minn|Asian Institute of Technology 120/148
+
+===== PAGE 121 =====
+Measurement of Lung Function
+Lung function was measured using
+Forced Vital Capacity (FVC)
+which is the volume of air (ml) expelled in 6 seconds.
+Loss of lung function was defined as
+Reduction in FVC=Initial FVC−Final FVC
+To compare treatments:
+D= (Reduction on Placebo)−(Reduction on Amiloride)
+Interpretation
+Positive difference⇒Amiloride causes less loss.
+Negative difference⇒Placebo performs better.
+Sein Minn|Asian Institute of Technology 121/148
+
+===== PAGE 122 =====
+Does amiloride reduce lung function loss?
+Null Hypothesis
+H0 :Median Difference= 0
+Alternative Hypothesis
+HA :Median Difference̸= 0
+Significance level:
+α= 0.05
+Method:
+Wilcoxon Signed-Rank Test
+Sein Minn|Asian Institute of Technology 122/148
+
+===== PAGE 123 =====
+Observed Differences
+The ordered differences were:
+−178,−152,−15,11,42,101,106,113,
+155,158,185,245,460,680
+Observations:
+Most differences are positive.
+Positive differences suggest lower loss under amiloride.
+Nonparametric methods are appropriate because normality cannot be assumed.
+Sein Minn|Asian Institute of Technology 123/148
+
+===== PAGE 124 =====
+Step 1: Rank Absolute Differences
+|D| Sign Rank
+11 + 1
+15 − 2
+42 + 3
+101 + 4
+106 + 5
+113 + 6
+152 − 7
+155 + 8
+158 + 9
+178 − 10
+185 + 11
+245 + 12
+460 + 13
+680 + 14
+Sein Minn|Asian Institute of Technology 124/148
+
+===== PAGE 125 =====
+Step 2: Compute Signed Rank Sums
+Positive ranks:
+S+ = 1 + 3 + 4 + 5 + 6 + 8 + 9 + 11 + 12 + 13 + 14 = 86
+Negative ranks:
+S− = 2 + 7 + 10 = 19
+Test statistic:
+S=S + = 86
+Sein Minn|Asian Institute of Technology 125/148
+
+===== PAGE 126 =====
+Step 3: Distribution UnderH 0
+For
+n= 14
+the expected value is
+E(S) = n(n+ 1)
+4 = 14(15)
+4 = 52.5
+Standard deviation:
+SD(S) =
+r
+n(n+ 1)(2n+ 1)
+24
+=
+r
+14(15)(29)
+24 = 15.93
+Sein Minn|Asian Institute of Technology 126/148
+
+===== PAGE 127 =====
+Step 4: Compute the Test Statistic
+zS = S−E(S)
+SD(S)
+Substituting values:
+zS = 86−52.5
+15.93
+= 2.103
+Sein Minn|Asian Institute of Technology 127/148
+
+===== PAGE 128 =====
+Decision Rule
+For a two-sided test at
+α= 0.05
+the rejection region is
+|zS| ≥1.977
+Observed value:
+|2.103|>1.977
+RejectH 0
+Sein Minn|Asian Institute of Technology 128/148
+
+===== PAGE 129 =====
+Interpretation
+The test result is statistically significant.
+Observed median difference:
+eD= 109.5ml
+Since the median difference is positive:
+Reduction on Placebo>Reduction on Amiloride
+This indicates that patients generally lost less lung function when receiving amiloride.
+Sein Minn|Asian Institute of Technology 129/148
+
+===== PAGE 130 =====
+Statistical Conclusion
+There is sufficient evidence at the 5% significance level to conclude that the median difference is not zero.
+Clinical Interpretation
+Patients treated with amiloride experienced a smaller decline in lung function than when treated with placebo.
+Amiloride appears effective in reducing lung function loss.
+The Wilcoxon Signed-Rank Test compares paired measurements.
+It does not require normally distributed differences.
+Positive ranks dominated the negative ranks:
+S+ = 86, S − = 19
+Test statistic:
+zS = 2.103
+Since|z S|>1.977, the treatment effect is statistically significant.
+Sein Minn|Asian Institute of Technology 130/148
+
+===== PAGE 131 =====
+Property Wilcoxon Signed-Rank Test (Paired
+Samples)
+Wilcoxon Rank-Sum Test (Indepen-
+dent Samples)
+Purpose Compare the median difference between
+paired observations
+Compare two independent populations
+using ranks
+Data Type Paired or matched observations (Before–
+After, Repeated Measures)
+Two independent groups (Treatment vs.
+Control)
+Sample Sizes One sample of paired differences:n Two independent samples:n 1 andn 2
+Ranking Procedure Rank the absolute differences|D i|and
+assign signs
+Rank all observations jointly across both
+groups
+Test Statistic S+ (or equivalentlyS −) R(sum of ranks for one group)
+Total Number of Ranks n N=n 1 +n 2
+Expected Value E(S) = n(n+ 1)
+4 E(R) = n1(n1 +n 2 + 1)
+2
+Variance Var(S) = n(n+ 1)(2n+ 1)
+24 Var(R) = n1n2(n1 +n 2 + 1)
+12
+Standard Deviation SD(S) =
+r
+n(n+ 1)(2n+ 1)
+24 SD(R) =
+r
+n1n2(n1 +n 2 + 1)
+12
+Normal Approximation Z= S−E(S)
+SD(S) Z= W−E(R)
+SD(R)
+Parametric Alternative Pairedt-test Two-samplet-test
+Example Before vs. After treatment(same pa-
+tients)
+Treatment group vs. Control group
+Sein Minn|Asian Institute of Technology 131/148
+
+===== PAGE 132 =====
+When to Use the Rank Sum Test
+Purpose
+The Wilcoxon Rank Sum Test compares two independent populations.
+Hypothesis
+H0 :Population Medians are Equal
+HA :Population Medians Differ
+Nonparametric alternative to Welch’s t-test.
+Suitable for skewed distributions and outliers.
+Works best when population shapes are similar.
+Sein Minn|Asian Institute of Technology 132/148
+
+===== PAGE 133 =====
+Steps in the Rank Sum Test
+1 Combine both samples into one list.
+2 Rank all observations from smallest to largest.
+3 Assign average ranks for ties.
+4 Sum ranks separately for each group.
+Rank Statistics
+R1 =Rank Sum for Sample 1
+R2 =Rank Sum for Sample 2
+Null Hypothesis
+If:
+H0
+is true, both groups should receive proportional shares of the ranks.
+Sein Minn|Asian Institute of Technology 133/148
+
+===== PAGE 134 =====
+Example: Rank Sum Calculation
+Samples
+Sample 1:
+−2.0,0.9,6.9
+Sample 2:
+−3.9,−1.6,1.4,5.7
+Ordered Ranks
+−3.9,−2.0,−1.6,0.9,1.4,5.7,6.9
+R1 = 2 + 4 + 7 = 13
+R2 = 1 + 3 + 5 + 6 = 15
+Sein Minn|Asian Institute of Technology 134/148
+
+===== PAGE 135 =====
+Rank Sum Distribution UnderH 0
+Expected Value
+E(R1) = n1(n1 +n 2 + 1)
+2
+Standard Deviation
+SD(R) =
+r
+n1n2(n1 +n 2 + 1)
+12
+Distribution is generated by all possible partitions of ranks.
+For large samples, the distribution becomes approximately Normal.
+Sein Minn|Asian Institute of Technology 135/148
+
+===== PAGE 136 =====
+Case Study: SIDS Investigation
+Research Question
+Do low-birthweight infants dying from SIDS show a gender difference in age at death?
+Data
+Boys:n 1 = 16
+Girls:n 2 = 11
+Outcome: Age at death (days)
+Hypotheses
+H0 :η boys −η girls = 0
+Ha :η boys −η girls ̸= 0
+whereηdenotes the population median age at death.
+Because the two groups are independent and normality cannot be assumed, theWilcoxon Rank-Sum Testis
+used.
+Sein Minn|Asian Institute of Technology 136/148
+
+===== PAGE 137 =====
+Wilcoxon Rank-Sum Test Calculations
+Step 1: Pool all observationsN=n 1 +n 2 = 16 + 11 = 27
+Rank all 27 observations from smallest to largest.
+Step 2: Compute rank sums
+R1 = 221(Boys)
+R2 = 157(Girls)
+UsingR=R 1,
+E(R) = n1(N+ 1)
+2 = 16(28)
+2 = 224
+SD(R) =
+r
+n1n2(N+ 1)
+12 =
+r
+(16)(11)(28)
+12 = 20.265
+zR = R−E(R)
+SD(R) = 221−224
+20.265 =−0.148
+Sein Minn|Asian Institute of Technology 137/148
+
+===== PAGE 138 =====
+Decision and Interpretation
+Critical Value
+Forα= 0.05(two-sided),
+|zR| ≥1.974
+is the rejection region.
+Observed Statistic
+zR =−0.148
+|zR|= 0.148<1.974
+Decision
+Fail to rejectH 0.
+Conclusion
+Boys: Median age at death = 82.5 days
+Girls: Median age at death = 87 days
+Although girls had a slightly larger sample median age at death, the difference is not statistically significant.
+No evidence of a gender difference in median age at death
+for low-birthweight infants dying from SIDS.
+Sein Minn|Asian Institute of Technology 138/148
+
+===== PAGE 139 =====
+Population vs. Randomization Models
+Population Model
+Subjects are random samples from a large
+population.
+Goal: Generalize conclusions to the broader
+population.
+Common in survey statistics.
+Randomization Model
+Subjects are fixed.
+Randomness comes from treatment assignment.
+Common in clinical trials.
+Nonparametric methods are valid under both inference frameworks.
+Sein Minn|Asian Institute of Technology 139/148
+
+===== PAGE 140 =====
+Nonparametric vs. t-methods
+Setting Normal Population Non-Normal Population
+Paired Samples Paired t-test Signed Rank Test
+Independent Samples Welch t-test Rank Sum Test
+Three or More Groups ANOVA Kruskal-Wallis
+Guideline
+Use nonparametric methods when:
+Sample sizes are small,
+Data are skewed,
+Outliers are present,
+Data are ordinal.
+Sein Minn|Asian Institute of Technology 140/148
+
+===== PAGE 141 =====
+Modern Nonparametric Methods
+Permutation Testing
+Modern computers allow exact permutation tests by evaluating every possible labeling of the data.
+No reliance on Normal approximations.
+Produces exact p-values.
+Widely used in modern machine learning and clinical research.
+Python Tools
+scipy.stats.wilcoxon
+scipy.stats.ranksums
+scipy.stats.mannwhitneyu
+Sein Minn|Asian Institute of Technology 141/148
+
+===== PAGE 142 =====
+Summary
+Nonparametric methods avoid strong Normality assumptions.
+Rank-based procedures reduce sensitivity to outliers.
+Signed Rank Tests analyze paired samples.
+Rank Sum Tests analyze independent samples.
+Randomization and permutation ideas provide strong inferential foundations.
+Always interpret both:
+Statistical significance,
+Practical significance.
+“An approximate answer to the right problem is worth much more than an exact answer to an approximate
+problem.”
+Sein Minn|Asian Institute of Technology 142/148
+
+===== PAGE 143 =====
+References
+Sein Minn|Asian Institute of Technology 143/148
+
+===== PAGE 144 =====
+References I
+Jenny A. Baglivo.
+Principles of Statistics.
+2019.
+Avrim Blum, John Hopcroft, and Ravindran Kannan.
+Foundations of Data Science.
+Cambridge University Press, 2020.
+Trevor Hastie, Robert Tibshirani, and Jerome Friedman.
+The Elements of Statistical Learning: Data Mining, Inference, and Prediction.
+Second Edition, Springer, 2009.
+Percy Liang.
+Statistical Learning Theory.
+Lecture Notes/Textbook, 2016.
+Sein Minn|Asian Institute of Technology 144/148
+
+===== PAGE 145 =====
+References II
+Kevin P. Murphy.
+Probabilistic Machine Learning: An Introduction.
+MIT Press, 2022.
+Kevin P. Murphy.
+Probabilistic Machine Learning: Advanced Topics.
+MIT Press, 2023.
+Jeff M. Phillips.
+An Introduction to Data Analysis through a Geometric Lens.
+Textbook Series.
+Jeff M. Phillips.
+Mathematical Foundations for Data Analysis.
+University of Utah.
+Sein Minn|Asian Institute of Technology 145/148
+
+===== PAGE 146 =====
+References III
+F. J. Anscombe.
+“Graphs in Statistical Analysis.”
+American Statistician, 27(1):17–21, 1973.
+Bradley Efron.
+“Bootstrap methods: another look at the jackknife.”
+Annals of Statistics, 7:1–26, 1979.
+Vladimir N. Vapnik.
+Statistical Learning Theory.
+John Wiley and Sons Inc., 1998.
+John W. Tukey.
+Exploratory Data Analysis.
+Addison-Wesley, 1977.
+Sein Minn|Asian Institute of Technology 146/148
+
+===== PAGE 147 =====
+References IV
+E. T. Jaynes.
+Probability Theory: The Logic of Science.
+Cambridge University Press, 2003.
+A. P. Dempster, N. M. Laird, and D. B. Rubin.
+“Maximum likelihood from incomplete data via the EM algorithm.”
+Journal of the Royal Statistical Society, Series B, 39:1–38, 1977.
+Stuart Lloyd.
+“Least squares quantization in PCM.”
+IEEE Transactions on Information Theory, 28(2):129–137, 1982.
+Jayadev Misra and David Gries.
+“Finding repeated elements.”
+Science of Computer Programming, 2(2):143–152, 1982.
+Sein Minn|Asian Institute of Technology 147/148
+
+===== PAGE 148 =====
+References V
+L. Page, S. Brin, R. Motwani, and T. Winograd.
+“The PageRank citation ranking: bringing order to the web.”
+Stanford Digital Library Technologies Project, 1998.
+Robert E. Schapire.
+“The strength of weak learnability.”
+Machine Learning, 5(2):197–227, 1990.
+J. B. Tenenbaum, V. de Silva, and J. Langford.
+“A global geometric framework for nonlinear dimensionality reduction.”
+Science, 290(5500):2319–2323, 2000.
+Sein Minn|Asian Institute of Technology 148/148
