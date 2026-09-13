@@ -1,0 +1,22 @@
+{
+  "best_config": {
+    "model_type": "polynomial",
+    "polynomial": true,
+    "regularization": "normal",
+    "use_momentum": false,
+    "method": "stochastic",
+    "initialization": "zeros",
+    "learning_rate": 0.001,
+    "cv_mse": 0.060138061678325326,
+    "cv_mse_std": 0.0015563659778943671,
+    "cv_r2": 0.8936927593069243,
+    "cv_r2_std": 0.004542510564293939
+  },
+  "test_metrics": {
+    "test_mse_log": 0.056082278368336506,
+    "test_r2_log": 0.8969794138035833,
+    "test_mse_price": 24824350541.55298,
+    "test_rmse_price": 157557.45155832198,
+    "test_r2_price": 0.8831559296001067
+  }
+}
