@@ -9,6 +9,13 @@ import streamlit as st
 
 ROOT = Path(__file__).resolve().parent
 
+# The A2 artifact was serialized with the custom LinearRegression class in this
+# directory. Streamlit Community Cloud starts the app from the repository root,
+# so make that module importable before joblib loads the saved model.
+CUSTOM_MODEL_DIR = ROOT / "notebooks"
+if str(CUSTOM_MODEL_DIR) not in sys.path:
+    sys.path.insert(0, str(CUSTOM_MODEL_DIR))
+
 
 UNKNOWN = "Not sure"
 FEATURE_COLUMNS = [
@@ -28,13 +35,8 @@ A1_TEST = {"r2": 0.9297451439, "rmse": 122172.5906, "mae": 71125.8555}
 A2_TEST = {"r2": 0.8831559296, "rmse": 157557.4516, "mae": 87678.9260}
 
 
-def first_existing_path(*paths):
-    """Find a model in either the Docker or local project layout."""
-    return next((path for path in paths if path.exists()), paths[0])
-
-
-A1_PATH = ( ROOT / "models" / "car_price_prediction_a1.joblib")
-A2_PATH = (ROOT / "models" / "best_a2_model.joblib")
+A1_PATH = ROOT / "models" / "car_price_prediction_a1.joblib"
+A2_PATH = ROOT / "models" / "best_a2_model.joblib"
 
 
 @st.cache_resource
