@@ -1,0 +1,25 @@
+name: st127132-car-price-a2
+
+services:
+  car-price-a2:
+    image: lha007/car-price-a2:latest
+    platform: linux/amd64
+    environment:
+      - PORT=8501
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.http.services.car-price-st127132.loadbalancer.server.port=8501
+      - traefik.http.routers.car-price-st127132.rule=Host(`st127132.ml.brain.cs.ait.ac.th`)
+      - traefik.http.routers.car-price-st127132.tls=true
+      - traefik.http.routers.car-price-st127132.tls.certresolver=letsencrypt
+      - traefik.http.routers.car-price-st127132.entrypoints=websecure
+    networks:
+      - default
+      - web
+
+networks:
+  default:
+  web:
+    external: true

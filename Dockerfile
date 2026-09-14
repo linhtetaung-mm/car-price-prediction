@@ -7,10 +7,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
 COPY models/ models/
+COPY notebooks/a2_regularization.py ./a2_regularization.py
 
 ENV PORT=8501
 
