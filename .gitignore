@@ -9,3 +9,4 @@ mlflow_a2.db
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+.DS_Store
