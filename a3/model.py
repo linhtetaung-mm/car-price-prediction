@@ -1,4 +1,4 @@
-"""Four-class softmax regression. All optimization is implemented using NumPy."""
+"""Tasks 1 and 2: multinomial logistic regression with optional ridge penalty."""
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.validation import check_is_fitted
@@ -7,11 +7,20 @@ from a3.metrics import ClassificationMetrics
 
 
 class LogisticRegression(ClassifierMixin, ClassificationMetrics, BaseEstimator):
-    """Minimize mean cross entropy + l2 * sum(W**2); do not penalize bias.
+    """Predict one of the four price classes using batch gradient descent.
 
-    Softmax generalizes the binary sigmoid to four mutually exclusive classes.
-    l2=0 disables ridge. The brief uses summed cross entropy; dividing its entire
-    objective by m gives our convention with l2 = lambda_in_brief / m.
+    lr : float
+        Learning rate for the weight and bias updates.
+    num_epochs : int
+        Maximum number of passes through the training data.
+    l2 : float
+        Ridge strength. Use 0 for no regularization.
+    tol : float
+        Stop when the change in training loss is this small.
+
+    Loss = mean cross entropy + l2 * sum(weights**2).
+    The bias is stored separately, so it is not included in the penalty.
+    The brief uses a summed loss; its lambda would be m * l2 here.
     """
     def __init__(self, lr=0.1, num_epochs=600, l2=0.0, tol=1e-8):
         self.lr = lr
@@ -33,13 +42,24 @@ class LogisticRegression(ClassifierMixin, ClassificationMetrics, BaseEstimator):
         return shifted - np.log(np.exp(shifted).sum(axis=1, keepdims=True))
 
     def _loss_gradient(self, X, y, weights, bias):
+        """Calculate the loss and the gradients for one batch."""
+        number_of_samples = len(y)
         log_probs = self._log_softmax(X @ weights + bias)
-        loss = -log_probs[np.arange(len(y)), y].mean() + self.l2 * np.sum(weights ** 2)
+
+        # Select the probability of the actual class for each training row.
+        actual_log_probs = log_probs[np.arange(number_of_samples), y]
+        cross_entropy = -actual_log_probs.mean()
+        ridge_penalty = self.l2 * np.sum(weights ** 2)
+        loss = cross_entropy + ridge_penalty
+
+        # Subtracting 1 at the actual class is the same as probabilities - one_hot_y.
         error = np.exp(log_probs)
-        error[np.arange(len(y)), y] -= 1
-        error /= len(y)
-        # d/dW [lambda * W^2] = 2 * lambda * W. Bias is unpenalized.
-        return float(loss), X.T @ error + 2 * self.l2 * weights, error.sum(axis=0)
+        error[np.arange(number_of_samples), y] -= 1
+        error /= number_of_samples
+
+        weight_gradient = X.T @ error + 2 * self.l2 * weights
+        bias_gradient = error.sum(axis=0)
+        return float(loss), weight_gradient, bias_gradient
 
     def fit(self, X, y):
         X = self._validate_X(X)
@@ -58,15 +78,19 @@ class LogisticRegression(ClassifierMixin, ClassificationMetrics, BaseEstimator):
         self.weights_ = np.zeros((self.n_features_in_, 4))
         self.bias_ = np.zeros(4)
         self.loss_history_ = []
+
+        # Each epoch uses all the training rows for one gradient update.
         for epoch in range(self.num_epochs):
-            loss, dw, db = self._loss_gradient(X, y, self.weights_, self.bias_)
+            loss, weight_gradient, bias_gradient = self._loss_gradient(
+                X, y, self.weights_, self.bias_
+            )
             if not np.isfinite(loss):
                 raise FloatingPointError("Training diverged; reduce the learning rate")
             self.loss_history_.append(loss)
             if epoch and abs(self.loss_history_[-2] - loss) <= self.tol:
                 break
-            self.weights_ -= self.lr * dw
-            self.bias_ -= self.lr * db
+            self.weights_ -= self.lr * weight_gradient
+            self.bias_ -= self.lr * bias_gradient
         self.n_iter_ = epoch + 1
         return self
 
@@ -78,4 +102,5 @@ class LogisticRegression(ClassifierMixin, ClassificationMetrics, BaseEstimator):
         return np.exp(self._log_softmax(X @ self.weights_ + self.bias_))
 
     def predict(self, X):
-        return self.classes_[np.argmax(self.predict_proba(X), axis=1)]
+        probabilities = self.predict_proba(X)
+        return self.classes_[np.argmax(probabilities, axis=1)]

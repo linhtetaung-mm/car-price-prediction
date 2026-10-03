@@ -2,15 +2,21 @@
 
 ## Assignment 3 — Four-class price prediction
 
-Student: **st127132**. The A3 deliverables are the executed [notebook](notebooks/a3_car_price_prediction.ipynb), this README, and the web application in [app/](app/). A1/A2 code and their existing deployment configuration remain available below.
+**Name:** Lin Htet Aung
 
-### What is implemented
+**Student ID:** st127132
 
-- NumPy multinomial logistic regression, adapted from the course softmax notebook, with stable probabilities and an optional L2 penalty.
-- Accuracy, per-class precision/recall/F1, macro and weighted averages implemented from confusion counts and checked against scikit-learn.
-- The A1/A2 preprocessing rules, with transformations fitted within each training fold.
-- Twelve MLflow-tracked configurations (three learning rates × four L2 strengths), five-fold stratified CV, and a held-out test evaluation.
-- A saved preprocessing/model pipeline, Streamlit classification app, model unit tests, and GitHub Actions for test → build → deploy.
+For A3, I use the same car dataset and cleaning steps from my previous assignments. Instead of predicting an exact price, the model predicts one of four price categories.
+
+The [notebook](notebooks/a3_car_price_prediction.ipynb) follows the same order as A1/A2: load the data, clean it, inspect the target, train the model and discuss the results. The application is in [app/](app/).
+
+### What I did
+
+1. Kept the data cleaning from A1/A2 and converted selling price into four classes.
+2. Implemented multinomial logistic regression with NumPy and added an optional ridge penalty.
+3. Calculated accuracy, precision, recall, F1, macro averages and weighted averages, then checked them against sklearn.
+4. Compared 12 configurations with five-fold cross-validation and recorded them in local MLflow.
+5. Saved the best pipeline, added a Streamlit app and prepared model tests and a GitHub deployment workflow.
 
 ### Price labels
 
@@ -21,11 +27,11 @@ Student: **st127132**. The A3 deliverables are the executed [notebook](notebooks
 | 2 | 600,000 < price ≤ 1,000,000 |
 | 3 | price > 1,000,000 |
 
-Fixed thresholds avoid learning bucket boundaries from test prices. Labels use original rupee prices, not the log-price regression target. There are 6,607 cleaned rows: 5,285 training and 1,322 test rows, split with stratification and seed 42. Numeric median imputation and standardization, plus categorical imputation and one-hot encoding, are fitted separately inside each CV fold.
+I use fixed rupee boundaries so each class has a clear meaning. There are 6,607 rows after cleaning: 5,285 for training and 1,322 for testing. The split uses stratification and random state 42. As in A2, preprocessing is fitted separately inside each training fold.
 
-### Verified local results
+### Results and observations
 
-Selection uses mean **CV macro F1**, not test performance. The selected learning rate is `0.3`, L2 strength is `0.0001`, and training uses up to 600 full-batch epochs.
+I selected the model using mean **CV macro F1** because the four classes have different numbers of samples. The best settings are learning rate `0.3` and L2 `0.0001`, using up to 600 batch-gradient epochs.
 
 | Metric | Result |
 |---|---:|
@@ -42,7 +48,7 @@ Class 2 is weakest by F1 (0.6494); premium-class recall is 0.6064. The model has
 
 **Support** means the number of actual observations of a class in the evaluated data. Weighted averages use support fractions that sum to one. The extra division by four in the brief's weighted-average example is omitted to match scikit-learn. Undefined metric divisions return zero.
 
-The objective is `mean(cross entropy) + l2 * sum(W²)`, with gradient `X.T @ (P - Y) / m + 2*l2*W`. Bias is not penalized. Set `l2=0` to disable the penalty. Because the brief uses summed loss, its numerical lambda corresponds to `m * l2` here. The notebook explains the equations and includes the actual implementation source.
+The objective is `mean(cross entropy) + l2 * sum(W²)`, with gradient `X.T @ (P - Y) / m + 2*l2*W`. Bias is not penalized. Set `l2=0` to disable the penalty. Because the brief uses summed loss, its numerical lambda corresponds to `m * l2` here. The notebook explains the equations and works through the metrics on a small example. The implementation is in `a3/model.py` and `a3/metrics.py`; the training loop is in `a3/train.py`, similar to the separate Python files used for A2.
 
 ### Run locally
 
@@ -63,7 +69,7 @@ python -m a3.train
 mlflow ui --backend-store-uri sqlite:///data/a3_mlflow.db
 ```
 
-The local SQLite database and MLflow artifact folders are machine-local outputs and are ignored by Git. After a fresh clone, rerun training before publishing. The trained application artifact, results CSV, JSON summary, and executed notebook are included in the submission files. The database preserves failed development runs as well as the 12 successful candidates; the results CSV identifies exactly the completed comparison runs.
+The local SQLite database and MLflow artifact folders are machine-local outputs and are ignored by Git. After a fresh clone, rerun training before publishing. The trained application artifact, results CSV, JSON summary, and executed notebook are included in the submission files. The database also contains earlier runs. The results CSV identifies the 12 candidates from the latest completed experiment.
 
 ### Upload to the course MLflow server later
 
@@ -96,7 +102,7 @@ The Docker Hub repository must be public for the current unauthenticated VM pull
 
 Planned A3 URL: **https://st127132.ml.brain.cs.ait.ac.th/a3/**. The separate `/a3` router allows the existing A1/A2 app to remain at `/`.
 
-**Completion status:** Local implementation, training, notebook and model tests are complete. Remote MLflow upload/Staging registration and GitHub/VM deployment are pending, per the request to finish locally. No remote deployment or GitHub push is claimed. Docker Compose configuration was validated; an image build was not run because the local Docker daemon is stopped.
+**Current status:** The local notebook, experiments, app and model tests are working. Uploading to the course MLflow server, confirming Staging and deploying through GitHub are still to do. The Compose configuration was checked, but the Docker image has not been built locally.
 
 ### A3 file guide
 
@@ -113,6 +119,11 @@ Planned A3 URL: **https://st127132.ml.brain.cs.ait.ac.th/a3/**. The separate `/a
 | `tests/test_a3.py` | Required input/output tests and mathematical checks |
 | `app/` | A3 web application, Dockerfile and Compose configuration |
 | `.github/workflows/a3-ci-cd.yml` | Tests before image publication and deployment |
+
+
+### References used during revision
+
+I reviewed [SaniahKayenat's A3 project](https://github.com/SaniahKayenat/AT82.03-Machine-Learning-Assignment-3), [annasus-10's car-price project](https://github.com/annasus-10/Car_Price_Prediction), and [KHH-AKA-Lucifer's car-price project](https://github.com/KHH-AKA-Lucifer/car-price-prediction) for comparison. The first covers classification; the other two mainly cover A1 regression. No code or report text was copied from those repositories. The notebook style and cleaning steps follow my own A1/A2 work, and the model follows the course softmax example linked in the notebook.
 
 ---
 
