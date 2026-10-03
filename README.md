@@ -1,4 +1,123 @@
-# Car Price Prediction — Assignments 1 and 2
+# Car Price Prediction — Assignments 1, 2 and 3
+
+## Assignment 3 — Four-class price prediction
+
+Student: **st127132**. The A3 deliverables are the executed [notebook](notebooks/a3_car_price_prediction.ipynb), this README, and the web application in [app/](app/). A1/A2 code and their existing deployment configuration remain available below.
+
+### What is implemented
+
+- NumPy multinomial logistic regression, adapted from the course softmax notebook, with stable probabilities and an optional L2 penalty.
+- Accuracy, per-class precision/recall/F1, macro and weighted averages implemented from confusion counts and checked against scikit-learn.
+- The A1/A2 preprocessing rules, with transformations fitted within each training fold.
+- Twelve MLflow-tracked configurations (three learning rates × four L2 strengths), five-fold stratified CV, and a held-out test evaluation.
+- A saved preprocessing/model pipeline, Streamlit classification app, model unit tests, and GitHub Actions for test → build → deploy.
+
+### Price labels
+
+| Class | Selling price (INR) |
+|---|---|
+| 0 | 0 < price ≤ 300,000 |
+| 1 | 300,000 < price ≤ 600,000 |
+| 2 | 600,000 < price ≤ 1,000,000 |
+| 3 | price > 1,000,000 |
+
+Fixed thresholds avoid learning bucket boundaries from test prices. Labels use original rupee prices, not the log-price regression target. There are 6,607 cleaned rows: 5,285 training and 1,322 test rows, split with stratification and seed 42. Numeric median imputation and standardization, plus categorical imputation and one-hot encoding, are fitted separately inside each CV fold.
+
+### Verified local results
+
+Selection uses mean **CV macro F1**, not test performance. The selected learning rate is `0.3`, L2 strength is `0.0001`, and training uses up to 600 full-batch epochs.
+
+| Metric | Result |
+|---|---:|
+| Mean CV macro F1 | 0.7696 |
+| CV macro F1 standard deviation | 0.0139 |
+| Test accuracy | 0.7610 |
+| Test macro F1 | 0.7360 |
+| Test weighted F1 | 0.7608 |
+| Majority-class baseline accuracy | 0.3805 |
+
+The best unregularized CV macro F1 is 0.76955, almost identical to ridge's 0.76959. This difference is much smaller than fold variation and does not establish a meaningful regularization advantage. The fixed epoch budget also affects learning-rate comparisons.
+
+Class 2 is weakest by F1 (0.6494); premium-class recall is 0.6064. The model has linear boundaries in the encoded feature space and does not explicitly model the ordering of price bands. Its probabilities have not been calibrated. These classification results are not directly comparable to A1/A2 regression R² or RMSE.
+
+**Support** means the number of actual observations of a class in the evaluated data. Weighted averages use support fractions that sum to one. The extra division by four in the brief's weighted-average example is omitted to match scikit-learn. Undefined metric divisions return zero.
+
+The objective is `mean(cross entropy) + l2 * sum(W²)`, with gradient `X.T @ (P - Y) / m + 2*l2*W`. Bias is not penalized. Set `l2=0` to disable the penalty. Because the brief uses summed loss, its numerical lambda corresponds to `m * l2` here. The notebook explains the equations and includes the actual implementation source.
+
+### Run locally
+
+Use Python 3.14 with the pinned packages matching the saved model:
+
+```bash
+python3.14 -m venv venv
+source venv/bin/activate
+pip install -r requirements-a3.txt
+python -m unittest discover -s tests -v
+streamlit run app/streamlit_app.py
+```
+
+Open the notebook with a Python interpreter using this environment. Its saved outputs are included. `RUN_EXPERIMENTS = False` uses the saved experiment results; change it to `True` to retrain, or run:
+
+```bash
+python -m a3.train
+mlflow ui --backend-store-uri sqlite:///data/a3_mlflow.db
+```
+
+The local SQLite database and MLflow artifact folders are machine-local outputs and are ignored by Git. After a fresh clone, rerun training before publishing. The trained application artifact, results CSV, JSON summary, and executed notebook are included in the submission files. The database preserves failed development runs as well as the 12 successful candidates; the results CSV identifies exactly the completed comparison runs.
+
+### Upload to the course MLflow server later
+
+Use the **updated HTTPS endpoint**, `https://mlflow.ml.brain.cs.ait.ac.th`, with username `student` and the password supplied by the course. The experiment is `st127132-a3`; the model is `st127132-a3-model`. Do not put the password into committed files.
+
+The notebook's remote cell sets `MLFLOW_TRACKING_USERNAME` and `MLFLOW_TRACKING_PASSWORD`, prompting for the password with `getpass`. Set `PUBLISH_REMOTE = True` to upload. Alternatively, set both variables in your shell environment and run:
+
+```bash
+python -m a3.publish
+```
+
+This uploads the 12 saved local runs with parameters, fold metrics and models, resumes interrupted uploads, registers the selected model, and sets it to **Staging**. It touches only this student's named experiment/model and never logs the dataset. It verifies the registered model can be loaded before saving `data/a3_remote_receipt.json` as evidence. The receipt is authoritative for remote completion; the training summary describes the original local run.
+
+[MLflow stages are deprecated](https://mlflow.org/docs/latest/ml/model-registry/workflow/), but the assignment explicitly asks for Staging, so this code keeps that requirement. A server that no longer supports stages will raise an error rather than claim success. Model files are saved with explicit cloudpickle serialization for compatibility with the custom NumPy estimator and the course registry.
+
+### Deployment and CI/CD
+
+The [workflow](.github/workflows/a3-ci-cd.yml) runs model tests on every push and pull request. On a successful default-branch run, it builds `app/Dockerfile`, pushes a commit-tagged image to `lha007/car-price-a3`, and deploys to `~/car-price-a3` on the course VM. The deployment is gated by the test job, container health, and public HTTPS health checks.
+
+Create the GitHub environment **course-vm** and configure these secrets:
+
+| Secret | Value |
+|---|---|
+| `DOCKERHUB_USERNAME` | Docker Hub account with push access to `lha007/car-price-a3` |
+| `DOCKERHUB_TOKEN` | Docker Hub access token |
+| `A3_SSH_PRIVATE_KEY` | Deployment key authorized for `st127132` on the VM |
+| `A3_SSH_KNOWN_HOSTS` | Verified SSH host-key entry for `ml.brain.cs.ait.ac.th` |
+
+The Docker Hub repository must be public for the current unauthenticated VM pull, or you must configure registry authentication on the VM. GitHub-hosted runners must also be able to reach the VM; a campus-only VM needs a reachable self-hosted runner. Verify host keys through a trusted course source before saving them. See [app/README.md](app/README.md) for Docker and manual deployment commands.
+
+Planned A3 URL: **https://st127132.ml.brain.cs.ait.ac.th/a3/**. The separate `/a3` router allows the existing A1/A2 app to remain at `/`.
+
+**Completion status:** Local implementation, training, notebook and model tests are complete. Remote MLflow upload/Staging registration and GitHub/VM deployment are pending, per the request to finish locally. No remote deployment or GitHub push is claimed. Docker Compose configuration was validated; an image build was not run because the local Docker daemon is stopped.
+
+### A3 file guide
+
+| File | Purpose |
+|---|---|
+| `notebooks/a3_car_price_prediction.ipynb` | Executed explanation, comparisons, figures and remote-upload cell |
+| `a3/model.py`, `a3/metrics.py` | From-scratch model and metrics |
+| `a3/data.py` | A1/A2 preprocessing and fixed price classes |
+| `a3/train.py`, `a3/publish.py` | Reproducible experiment and resumable remote upload |
+| `models/best_a3_model.joblib` | Selected fitted pipeline |
+| `data/a3_experiment_results.csv` | All 12 completed configurations |
+| `data/a3_best_model_summary.json` | Selection, test report, split counts and provenance |
+| `data/a3_confusion_matrix.csv` | Held-out actual-by-predicted class counts |
+| `tests/test_a3.py` | Required input/output tests and mathematical checks |
+| `app/` | A3 web application, Dockerfile and Compose configuration |
+| `.github/workflows/a3-ci-cd.yml` | Tests before image publication and deployment |
+
+---
+
+## Assignments 1 and 2
+
 
 This project predicts the selling price of a used car in Indian rupees. It contains my Assignment 1 Random Forest model, my Assignment 2 regression model implemented from scratch, the MLflow experiment results, and a two-page Streamlit website for comparing both models.
 

@@ -10,3 +10,8 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 .DS_Store
+
+# A3 machine-local tracking and credentials
+data/a3_mlflow.db*
+.env
+.env.*

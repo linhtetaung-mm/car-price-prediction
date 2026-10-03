@@ -1,0 +1,97 @@
+{
+  "student_id": "st127132",
+  "tracking_uri": "sqlite:////Users/krown/AIT/ML/Assignments/Car_Price_Prediction/data/a3_mlflow.db",
+  "experiment_name": "st127132-a3",
+  "cleaned_rows": 6607,
+  "train_rows": 5285,
+  "test_rows": 1322,
+  "train_class_counts": {
+    "0": 1787,
+    "1": 2011,
+    "2": 1112,
+    "3": 375
+  },
+  "test_class_counts": {
+    "0": 447,
+    "1": 503,
+    "2": 278,
+    "3": 94
+  },
+  "price_labels": [
+    "Budget: up to \u20b9300,000",
+    "Mid-range: \u20b9300,000\u2013600,000",
+    "Upper mid-range: \u20b9600,000\u20131,000,000",
+    "Premium: above \u20b91,000,000"
+  ],
+  "best_config": {
+    "run_id": "734cb67ba94442e7864b54957150bdaa",
+    "lr": 0.3,
+    "l2": 0.0001,
+    "num_epochs": 600,
+    "folds": 5,
+    "random_state": 42,
+    "optimizer": "batch",
+    "objective": "mean_cross_entropy_plus_l2",
+    "price_edges": "0,300000,600000,1000000,inf",
+    "dataset_sha256": "1b2a30b2f36fd246366773fe5375399692f1a113890ad2a6d464b8c8deaadadb",
+    "cv_accuracy": 0.780321665089877,
+    "cv_macro_precision": 0.7939719215396532,
+    "cv_macro_recall": 0.7524888172696004,
+    "cv_macro_f1_score": 0.7695857250448033,
+    "cv_weighted_precision": 0.7848478820867243,
+    "cv_weighted_recall": 0.780321665089877,
+    "cv_weighted_f1_score": 0.7805897781408868,
+    "cv_macro_f1_std": 0.013917238737626266
+  },
+  "test_metrics": {
+    "test_accuracy": 0.7609682299546142,
+    "test_macro_precision": 0.7623908199643494,
+    "test_macro_recall": 0.717351524648655,
+    "test_macro_f1_score": 0.7359979118885916,
+    "test_weighted_precision": 0.7646434667939517,
+    "test_weighted_recall": 0.7609682299546142,
+    "test_weighted_f1_score": 0.7608064464033573
+  },
+  "test_report": {
+    "0": {
+      "precision": 0.88,
+      "recall": 0.8366890380313199,
+      "f1-score": 0.8577981651376146,
+      "support": 447
+    },
+    "1": {
+      "precision": 0.7112299465240641,
+      "recall": 0.7932405566600398,
+      "f1-score": 0.75,
+      "support": 503
+    },
+    "2": {
+      "precision": 0.6666666666666666,
+      "recall": 0.6330935251798561,
+      "f1-score": 0.6494464944649446,
+      "support": 278
+    },
+    "3": {
+      "precision": 0.7916666666666666,
+      "recall": 0.6063829787234043,
+      "f1-score": 0.6867469879518072,
+      "support": 94
+    },
+    "accuracy": 0.7609682299546142,
+    "macro avg": {
+      "precision": 0.7623908199643494,
+      "recall": 0.717351524648655,
+      "f1-score": 0.7359979118885916,
+      "support": 1322
+    },
+    "weighted avg": {
+      "precision": 0.7646434667939517,
+      "recall": 0.7609682299546142,
+      "f1-score": 0.7608064464033573,
+      "support": 1322
+    }
+  },
+  "majority_baseline_accuracy": 0.3804841149773071,
+  "remote_status": "pending upload",
+  "selection": "5-fold stratified CV macro F1; test not used for selection"
+}
