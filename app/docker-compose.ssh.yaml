@@ -1,0 +1,6 @@
+# Optional access through an SSH tunnel when the shared HTTPS proxy is offline.
+# Combine with docker-compose.yaml; the port is only exposed on the VM itself.
+services:
+  car-price-a3:
+    ports:
+      - "127.0.0.1:18503:8501"

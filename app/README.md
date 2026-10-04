@@ -40,3 +40,41 @@ The course VM must have the existing `web` Docker network, Traefik and Docker Co
 The A3 route is https://st127132.ml.brain.cs.ait.ac.th/a3/. It uses a higher-priority `/a3` path rule while retaining the existing A1/A2 root service. The repository's root `Dockerfile` and `docker-compose.yaml` remain the A2 configuration.
 
 For automated deployment, configure the four `course-vm` GitHub secrets described in the root README, then push to the repository's default branch. Tests must pass before deployment starts. A failed deployment produces a failing job; the workflow does not implement an automatic rollback. Redeploy a previous known-good image tag if needed.
+
+
+## Current mlbrain deployment (4 October 2026)
+
+A3 is running in `~/car-price-a3` on `ml.brain.cs.ait.ac.th` as container
+`st127132-car-price-a3-car-price-a3-1`. Its private endpoint is
+`http://127.0.0.1:18503/a3/` on the VM. The container passed its health check and
+all six model tests. The shared public ports 80 and 443 are currently unavailable,
+so the public HTTPS URL is not working yet.
+
+To use the deployed app now, run this on your own computer and leave the terminal open:
+
+```bash
+ssh -N -o ExitOnForwardFailure=yes -L 18503:127.0.0.1:18503 st127132@ml.brain.cs.ait.ac.th
+```
+
+Then open **http://localhost:18503/a3/** in your browser. Stop the tunnel with
+Ctrl+C when finished; this does not stop the app on the VM. This port is bound to
+the VM's localhost address and is not a public web port.
+
+The VM could not reach Docker Hub during deployment. The fallback
+`app/Dockerfile.offline` reused the cached A2 image, which has matching NumPy,
+pandas and scikit-learn versions and Streamlit 1.63.0. The standard Dockerfile
+and CI still use the versions pinned in `requirements.txt`.
+
+The following commands reproduce this fallback on the VM after copying the A3
+source files and model to `~/car-price-a3`:
+
+```bash
+cd ~/car-price-a3
+docker build --pull=false -f app/Dockerfile.offline -t st127132-car-price-a3:8f6b3c9 .
+A3_IMAGE=st127132-car-price-a3:8f6b3c9 docker compose   -f app/docker-compose.yaml -f app/docker-compose.ssh.yaml   up -d --pull never --wait --wait-timeout 120
+```
+
+The HTTPS routing labels are already present. The course administrator needs to
+restore the shared web service; after that, verify the public A3 URL separately.
+This manual deployment does not complete the MLflow registration or prove that
+the GitHub Actions deployment workflow has run.

@@ -102,7 +102,7 @@ The Docker Hub repository must be public for the current unauthenticated VM pull
 
 Planned A3 URL: **https://st127132.ml.brain.cs.ait.ac.th/a3/**. The separate `/a3` router allows the existing A1/A2 app to remain at `/`.
 
-**Current status:** The local notebook, experiments, app and model tests are working. Uploading to the course MLflow server, confirming Staging and deploying through GitHub are still to do. The Compose configuration was checked, but the Docker image has not been built locally.
+**Current status (4 October 2026):** A3 has been manually deployed on mlbrain and passed its container health check and six model tests. The shared web ports 80/443 are unavailable, so the public HTTPS address still refuses connections. Use the SSH tunnel described in [app/README.md](app/README.md) to open the deployed app at `http://localhost:18503/a3/`. MLflow upload/Staging registration and verification of GitHub Actions deployment are still pending.
 
 ### A3 file guide
 
